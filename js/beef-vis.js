@@ -76,7 +76,7 @@ $.extend(beefApp, {
       circles.attr({
         cx: function(d, i) { return padding + (parseInt(d.sentence_id) * (width - (padding * 2)) / maxcount); },
         cy: height / 2,
-        r: function(d, i) { return d.count; }
+        r: function(d, i) { return parseInt(d.count); }
       });
 
     };
