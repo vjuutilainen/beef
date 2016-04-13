@@ -1,42 +1,46 @@
 $.extend(beefApp, {
 
-  initVis: function (data) {
+  initVis: function (data, maxcount) {
     
     var esivis = $('#esi-vis');
     var esiframe = esivis.find('iframe').contents();
 
-    var data = [
-      {
-        sentence_id: 1,
-        count: 4,
-        sentence: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
-      },
-      {
-        sentence_id: 2,
-        count: 5,
-        sentence: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-      },
-      {
-        sentence_id: 3,
-        count: 9,
-        sentence: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
-      },
-      {
-        sentence_id: 4,
-        count: 15,
-        sentence: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-      },
-      {
-        sentence_id: 5,
-        count: 20,
-        sentence: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-      },
-      {
-        sentence_id: 6,
-        count: 12,
-        sentence: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
-      }
-    ];
+    if(!location.href.match('http://beef.dev')) {
+      var maxcount = 16;
+      var data = [
+        {
+          sentence_id: 3,
+          count: 4,
+          sentence: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+        },
+        {
+          sentence_id: 5,
+          count: 5,
+          sentence: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+        },
+        {
+          sentence_id: 10,
+          count: 9,
+          sentence: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+        },
+        {
+          sentence_id: 12,
+          count: 15,
+          sentence: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        },
+        {
+          sentence_id: 13,
+          count: 20,
+          sentence: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+        },
+        {
+          sentence_id: 16,
+          count: 12,
+          sentence: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+        }
+      ];
+    }
+   
 
     var beefVis = $('<div class="beef-vis"></div>');
     esiframe.find('ul.some').before(beefVis);
@@ -46,6 +50,8 @@ $.extend(beefApp, {
 
     var width = svg.node().parentNode.offsetWidth;
     var height = 100;
+
+    var padding = 20;
 
     var line = null;
     var circles = null;
@@ -60,12 +66,13 @@ $.extend(beefApp, {
         y1: height / 2,
         x2: width,
         y2: height / 2,
-        'stroke': '#ccc',
+        'stroke': 'black',
+        'stroke-dasharray': '1, 3',
         'stroke-width': '1px'
       });
 
       circles.attr({
-        cx: function(d, i) { return i * width / data.length; },
+        cx: function(d, i) { return padding + (d.sentence_id * (width - (padding * 2)) / maxcount); },
         cy: height / 2,
         r: function(d, i) { return d.count; }
       });
@@ -82,7 +89,9 @@ $.extend(beefApp, {
                      'cursor': 'pointer'
                    })
                    .attr({
-                      fill: 'cyan'
+                      fill: 'yellow',
+                      stroke: 'black',
+                      'stroke-width': '4px'
                    });
 
       circles.on('click', function(d) {
@@ -94,7 +103,7 @@ $.extend(beefApp, {
       });
 
       circles.on('mouseout', function(d) {
-        d3.select(this).attr('fill', 'cyan');
+        d3.select(this).attr('fill', 'yellow');
       });
 
     };
