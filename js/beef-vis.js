@@ -1,6 +1,7 @@
 $.extend(beefApp, {
+<<<<<<< HEAD
   initVis: function () {
-    
+    console.log(d3);
     var data = [
       {
         sentence_id: 1,
@@ -34,5 +35,9 @@ $.extend(beefApp, {
       }
     ];   
 
+=======
+  initVis: function () {
+    console.log(d3);
+>>>>>>> 2bdc5cd663305a9df66da0cf09a51f6f2b1080bc
   }
 });
