@@ -97,7 +97,7 @@ $.extend(beefApp, {
     this.visSentenceCount = maxcount ? parseInt(maxcount) : 16;
 
     var beefVis = $('<div class="beef-vis"></div>');
-    esiframe.find('ul.some').before(beefVis);
+    esiframe.find('.hgroup h2').after(beefVis);
 
     this.visSvg = d3.select(beefVis[0]).append('svg');
     this.visInfo = d3.select(beefVis[0]).append('div').attr('class', 'info');
