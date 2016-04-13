@@ -1,7 +1,10 @@
 $.extend(beefApp, {
 
-  initVis: function () {
-    console.log(d3);
+  initVis: function (data) {
+    
+    var esivis = $('#esi-vis');
+    var esiframe = esivis.find('iframe').contents();
+
     var data = [
       {
         sentence_id: 1,
@@ -35,6 +38,62 @@ $.extend(beefApp, {
       }
     ];
 
+    var beefVis = $('<div class="beef-vis"></div>');
+    esiframe.find('ul.some').before(beefVis);
+
+    var svg = d3.select(beefVis[0]).append('svg');
+
+    var width = svg.node().parentNode.offsetWidth;
+    var height = 100;
+
+    var line = null;
+    var circles = null;
+
+    var resize = function() {
+      width = svg.node().parentNode.offsetWidth;
+      svg.attr('height', height + 'px');
+      svg.attr('width', width + 'px');
+
+      line.attr({
+        x1: 0,
+        y1: height / 2,
+        x2: width,
+        y2: height / 2,
+        'stroke': '#ccc',
+        'stroke-width': '1px'
+      });
+
+      circles.attr({
+        cx: function(d, i) { return i * width / data.length; },
+        cy: height / 2,
+        r: function(d, i) { return d.count; }
+      });
+
+    };
+
+    var initShapes = function() {
+      line = svg.append('line');
+      circles = svg.selectAll('circle')
+                   .data(data)
+                   .enter()
+                   .append('circle')
+                   .attr({
+                      fill: 'cyan'
+                   });
+
+    };
+
+    window.addEventListener('resize', function() {
+      resize();
+    });
+
+    initShapes();
+    resize();
+
     
+    
+
+
+
   }
 });
