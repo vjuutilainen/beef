@@ -12,12 +12,41 @@ $.extend(beefApp, {
   circleMaxRadius: 15,
 
   updateVis: function(data, maxcount) {
-    
-  },
+    this.visData = data;
+    this.visSentenceCount = parseInt(maxcount);
+    this.maxBeefValue = d3.max(this.visData, function(d) { return parseInt(d.count); });
 
-  initVis: function (data, maxcount) {
-    var esivis = $('#esi-vis');
-    var esiframe = esivis.find('iframe').contents();
+    var join = visCircles.data(visData);
+
+    join.exit().remove();
+
+    join.enter()
+        .append('circle')
+        .style({
+          'cursor': 'pointer'
+        })
+        .attr({
+           fill: 'yellow',
+           stroke: 'black',
+           'stroke-width': '4px'
+        });
+
+    join.attr({
+      cx: function(d, i) { return this.visPadding + (parseInt(d.sentence_id) * (this.visWidth - (this.visPadding * 2)) / this.visSentenceCount); }.bind(this),
+      cy: this.visHeight / 2,
+      r: function(d, i) { 
+        return parseInt(d.count) / this.maxBeefValue * this.circleMaxRadius; 
+      }.bind(this)
+    });
+
+    this.visCircles = join;
+
+    this.visCircles.on('click', function(d) {
+      var esivis = $('#esi-vis');
+      var y = (esivis.find('iframe').contents().find('.sentence_' + d.sentence_id).offset().top);
+      document.getElementById('iframe').contentWindow.setTimeout('this.scrollTo(0, ' + y + ');', 1);
+    });
+
   },
 
   initVisEvents: function() {
@@ -29,9 +58,7 @@ $.extend(beefApp, {
     this.visCircles.on('click', function(d) {
       var esivis = $('#esi-vis');
       var y = (esivis.find('iframe').contents().find('.sentence_' + d.sentence_id).offset().top);
-
-      document.getElementById("iframe").contentWindow.setTimeout('this.scrollTo(0, ' + y + ');', 1);
-
+      document.getElementById('iframe').contentWindow.setTimeout('this.scrollTo(0, ' + y + ');', 1);
     });
 
     this.visCircles.on('mouseover', function(d) {
@@ -58,8 +85,6 @@ $.extend(beefApp, {
       'stroke-dasharray': '1, 3',
       'stroke-width': '1px'
     });
-
-      
 
     this.visCircles.attr({
       cx: function(d, i) { return this.visPadding + (parseInt(d.sentence_id) * (this.visWidth - (this.visPadding * 2)) / this.visSentenceCount); }.bind(this),
