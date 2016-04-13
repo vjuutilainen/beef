@@ -62,8 +62,13 @@ $.extend(beefApp, {
 
     this.visCircles.on('click', function(d) {
       var esivis = $('#esi-vis');
-      var y = (esivis.find('iframe').contents().find('.sentence_' + d.sentence_id).offset().top);
+      var element = esivis.find('iframe').contents().find('.sentence_' + d.sentence_id);
+      var y = element.offset().top;
       esivis.find('iframe')[0].contentWindow.setTimeout('this.scrollTo(0, ' + y + ');', 1);
+      element.addClass('clicked');
+      window.setTimeout(function () {
+        element.removeClass('clicked');
+      }, 1500);
     });
 
     this.visCircles.on('mouseover', function(d) {

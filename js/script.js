@@ -68,14 +68,14 @@
 
         window.setTimeout(function () {
           window.setInterval(function () {
-            // beefApp.getBeefs(data, true);
-          }, 5000);
+            beefApp.getBeefs(data, true);
+          }, 10000);
         }, 5000);
 
         // Init frame events.
         beefApp.initIframeEvents(beefApp.frame);
 
-        beefApp.frame.find('.text').after('<div class="beefinfo">Where was the beef? Pleace select a sentence that best sums up the story.</div>')
+        beefApp.frame.find('.text').after('<div class="beefinfo">Where was the beef? Pleace select a sentence that best sums up the story.</div>');
       };
     },
     initIframeEvents: function () {
@@ -86,7 +86,7 @@
         $(this).addClass('disabled');
         var msg = $('<div class="msg">Beef\'d</div>').appendTo($(this));
         window.setTimeout(function () {
-          msg.fadeOut(500).remove();
+          msg.fadeOut(500);
         }, 1500);
         var data = {
           'article_id':beefApp.article_id,
