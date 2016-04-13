@@ -80,14 +80,12 @@
       });
     },
     getBeefs: function (data) {
-      console.log(data)
       $.ajax({
         data:data,
         dataType:'json',
         statusCode:{
           200: function (data) {
             // Init vis.
-            console.log(data)
             beefApp.initVis();
           }
         },
