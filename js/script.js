@@ -50,7 +50,7 @@
           $(this).html(sentences);
         });
         esiframe.find('p .sentence').click(function () {
-          alert("test");
+          yleApp.beefWord();
         });
       };
     },
