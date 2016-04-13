@@ -9,7 +9,7 @@ try {
   $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   $con->exec('SET CHARACTER SET utf8');
   $rows = array();
-  $stmt = $con->prepare("SELECT count(*) as count, sentence_id FROM articles_data WHERE article_id = :article_id GROUP BY sentence_id ORDER BY sentence_id ASC");
+  $stmt = $con->prepare("SELECT count(*) as count, sentence_id, sentence_class, sentence FROM articles_data WHERE article_id = :article_id GROUP BY sentence_id ORDER BY sentence_id ASC");
 
   $article_id = $_GET['article_id'];
   $stmt->bindParam(':article_id', $article_id);

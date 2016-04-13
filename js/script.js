@@ -60,7 +60,7 @@
         esiframe.find('.text p').each(function () {
           var sentences = $(this).text().replace(/([^.!?]*[^.!?\s][.!?]['"]?)(\s|$)/g, function (val) {
             i++;
-            return '<span class="sentence" data-contents="' + val.trim() + '" data-sentence-id="sentence_' + i + '">' + val + '</span>'
+            return '<span class="sentence" data-sentence="' + val.trim() + '" data-sentence-class="sentence_' + i + '" data-sentence-id="1">' + val + '</span>'
           });
           $(this).html(sentences);
         });
@@ -73,22 +73,21 @@
       esiframe.find('p .sentence').click(function () {
         var data = {
           'article_id':beefApp.article_id,
-          'sentence':$(this).data('contents'),
+          'sentence':$(this).data('sentence'),
+          'sentence_class':$(this).data('sentence-class'),
           'sentence_id':$(this).data('sentence-id')
         }
         beefApp.beefWord(data);
       });
     },
     getBeefs: function (data) {
-      console.log(data)
       $.ajax({
         data:data,
         dataType:'json',
         statusCode:{
           200: function (data) {
             // Init vis.
-            console.log(data)
-            beefApp.initVis();
+            beefApp.initVis(data);
           }
         },
         url:'php/get.php',
