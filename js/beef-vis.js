@@ -16,7 +16,7 @@ $.extend(beefApp, {
     this.visSentenceCount = parseInt(maxcount);
     this.maxBeefValue = d3.max(this.visData, function(d) { return parseInt(d.count); });
 
-    var join = this.visCircles.data(visData);
+    var join = this.visCircles.data(this.visData);
 
     join.exit().remove();
 
