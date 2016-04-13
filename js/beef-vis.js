@@ -47,9 +47,11 @@ $.extend(beefApp, {
       esivis.find('iframe')[0].contentWindow.setTimeout('this.scrollTo(0, ' + y + ');', 1);
     });
 
-    var sorted = this.visData.sort(function(a, b) { return parseInt(a.count) > parseInt(b.count) ? -1 : parseInt(a.count) < parseInt(b.count) ? 1 : 0; });
-    this.visInfo.html('<p style="font-size:12px;font-family:Helvetica"><span style="font-weight:bold">Missä on asian pihvi?</span><br> ' + sorted[0].sentence + ' <span style="font-style:italic">(' + sorted[0].count + ' beefiä)</span></p>');
-
+    if(data.length > 0) {
+      var sorted = this.visData.sort(function(a, b) { return parseInt(a.count) > parseInt(b.count) ? -1 : parseInt(a.count) < parseInt(b.count) ? 1 : 0; });
+      this.visInfo.html('<p style="font-size:12px;font-family:Helvetica"><span style="font-weight:bold">Missä on asian pihvi?</span><br> ' + sorted[0].sentence + ' <span style="font-style:italic">(' + sorted[0].count + ' beefiä)</span></p>');
+    }
+   
   },
 
   initVisEvents: function() {
@@ -120,14 +122,11 @@ $.extend(beefApp, {
 
   initVis: function (data, maxcount) {
     
-    var esivis = $('#esi-vis');
-    var esiframe = esivis.find('iframe').contents();
-
     this.visData = (location.href.match('http://beef.dev') || location.href.match('http://yle.fi')) ? data : this.createMockData();
     this.visSentenceCount = maxcount ? parseInt(maxcount) : 16;
 
     var beefVis = $('<div class="beef-vis"></div>');
-    esiframe.find('article.content .hgroup h2').after(beefVis);
+    this.frame.find('article.content .hgroup h2').after(beefVis);
 
     this.visSvg = d3.select(beefVis[0]).append('svg');
     this.visInfo = d3.select(beefVis[0]).append('div').attr('class', 'info');
