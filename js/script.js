@@ -13,15 +13,12 @@
       return parseFloat(x.toFixed(d));
     },
     setPath: function () {
-      if (location.href.match('http://yle.fi/plus/yle')) {
-        beefApp.path = 'http://yle.fi/plus/yle/2016/' + beefApp.projectName + '/';
-      }
-      else if (location.href.match('http://yle.fi')) {
-        beefApp.path = 'http://yle.fi/plus/2016/' + beefApp.projectName + '/';
+      if (location.href.match('http://yle.fi/')) {
+        beefApp.php_path = 'http://yle.fi/uutiset/alpha.yle.fi/plus/alpha/beef/';
       }
       else {
-        beefApp.path = '2016/' + beefApp.projectName + '/';
-      }
+        beefApp.php_path = '';
+      }  
     },
     getScale: function () {
       var width = esivis.width();
@@ -83,6 +80,7 @@
       });
     },
     getBeefs: function (data, update) {
+      var get_parameter = (update === true) ? Date.now() / 1000 | 0 : ''; 
       $.ajax({
         data:data,
         dataType:'json',
@@ -97,7 +95,7 @@
             }
           }
         },
-        url:'php/get.php',
+        url:beefApp.php_path + 'php/get.php?v=' + get_parameter,
         type:'GET'
       });
     },
@@ -110,7 +108,7 @@
             beefApp.getBeefs({article_id: beefApp.article_id}, true);
           }
         },
-        url:'php/post.php',
+        url:beefApp.php_path + 'php/post.php',
         type:'POST'
       });
     },
