@@ -1,13 +1,13 @@
 $.extend(beefApp, {
 
   visWidth: 150,
-  visHeight: 100,
+  visHeight: 40,
   visSvg: null,
   visLine: null,
   visCircles: null,
   visData: null,
   visSentenceCount: 0,
-  visPadding: 10,
+  visPadding: 15,
   maxBeefValue: 0,
   circleMaxRadius: 15,
 
@@ -46,6 +46,9 @@ $.extend(beefApp, {
       var y = (esivis.find('iframe').contents().find('.sentence_' + d.sentence_id).offset().top);
       esivis.find('iframe')[0].contentWindow.setTimeout('this.scrollTo(0, ' + y + ');', 1);
     });
+
+    var sorted = this.visData.sort(function(a, b) { return parseInt(a.count) > parseInt(b.count) ? -1 : parseInt(a.count) < parseInt(b.count) ? 1 : 0; });
+    this.visInfo.html('<p style="font-size:12px;font-family:Helvetica"><span style="font-weight:bold">Missä on asian pihvi?</span><br> ' + sorted[0].sentence + ' <span style="font-style:italic">(' + sorted[0].count + ' beefiä)</span></p>');
 
   },
 
@@ -132,6 +135,7 @@ $.extend(beefApp, {
     this.maxBeefValue = d3.max(this.visData, function(d) { return parseInt(d.count); });
 
     this.visLine = this.visSvg.append('line');
+    
     this.visCircles = this.visSvg.selectAll('circle')
                                  .data(this.visData)
                                  .enter()
@@ -144,6 +148,10 @@ $.extend(beefApp, {
                                     stroke: 'black',
                                     'stroke-width': '4px'
                                  });
+
+    var sorted = this.visData.sort(function(a, b) { return parseInt(a.count) > parseInt(b.count) ? -1 : parseInt(a.count) < parseInt(b.count) ? 1 : 0; });
+    this.visInfo.html('<p style="font-size:12px;font-family:Helvetica"><span style="font-weight:bold">Missä on asian pihvi?</span><br> ' + sorted[0].sentence + ' <span style="font-style:italic">(' + sorted[0].count + ' beefiä)</span></p>');
+
     this.resizeVis();
     this.initVisEvents();
   }
