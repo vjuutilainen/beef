@@ -44,7 +44,7 @@
         // Store article id.
         beefApp.article_id = esiframe.find('body').data('articleid');
         // Add custom inline css.
-        esiframe.find('head').append('<style type="text/css">p .sentence { background-color: #fff; transition: all 0.5s; } p .sentence:hover { background-color: #ff0; transition: all 2s; }</style>');
+        esiframe.find('head').append('<style type="text/css">p .sentence { background-color: #fff; transition: all 0.5s; } p .sentence:hover { background-color: #ff0; transition: all 2s; } .beefinfo { padding: 20px; background-color: #f1f1f1; }</style>');
         // Add custom css file.
         // esiframe.find('head').append('<link rel="stylesheet" href="http://yle.fi/plus/yle/alpha/impact.ly/css/styles.css?v=">')
         // Mark sentences.
@@ -66,6 +66,8 @@
 
         // Init frame events.
         beefApp.initIframeEvents(esiframe);
+
+        esiframe.find('.text').after('<div class="beefinfo">WHERE WAS THA BEEF?!?!!??!??!!! YOU TELL US NOW BUT CLICK YOUR MOUSE OR MOBILE DEVICE\'S SCREEN.</div>')
       };
     },
     initIframeEvents: function (esiframe) {
