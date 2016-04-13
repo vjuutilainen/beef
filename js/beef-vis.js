@@ -1,15 +1,70 @@
 $.extend(beefApp, {
 
-  initVis: function (data, maxcount) {
+  visWidth: 150,
+  visHeight: 100,
+  visSvg: null,
+  visLine: null,
+  visCircles: null,
+  visData: null,
+  visSentenceCount: 0,
+  visPadding: 10,
+  maxBeefValue: 0,
+  circleMaxRadius: 15,
+
+  updateVis: function(data, maxcount) {
     
-    var esivis = $('#esi-vis');
-    var esiframe = esivis.find('iframe').contents();
+  },
 
-    var maxcount = parseInt(maxcount);
+  initVisEvents: function() {
 
-    if(!location.href.match('http://beef.dev')) {
-      var maxcount = 16;
-      var data = [
+    window.addEventListener('resize', function() {
+      this.resizeVis();
+    }.bind(this));
+
+    this.visCircles.on('click', function(d) {
+      $('html, body').animate({
+        scrollTop: $('#sentence_' + d.sentence_id).offset().top
+      }, 500);
+    });
+
+    this.visCircles.on('mouseover', function(d) {
+      d3.select(this).attr('fill', 'magenta');
+    });
+
+    this.visCircles.on('mouseout', function(d) {
+      d3.select(this).attr('fill', 'yellow');
+    });
+  },
+
+  resizeVis: function() {
+
+    this.visWidth = this.visSvg.node().parentNode.offsetWidth;
+    this.visSvg.attr('height', this.visHeight + 'px');
+    this.visSvg.attr('width', this.visWidth + 'px');
+
+    this.visLine.attr({
+      x1: 0,
+      y1: this.visHeight / 2,
+      x2: this.visWidth,
+      y2: this.visHeight / 2,
+      'stroke': 'black',
+      'stroke-dasharray': '1, 3',
+      'stroke-width': '1px'
+    });
+
+      
+
+    this.visCircles.attr({
+      cx: function(d, i) { return this.visPadding + (parseInt(d.sentence_id) * (this.visWidth - (this.visPadding * 2)) / this.visSentenceCount); }.bind(this),
+      cy: this.visHeight / 2,
+      r: function(d, i) { 
+        return parseInt(d.count) / this.maxBeefValue * this.circleMaxRadius; 
+      }.bind(this)
+    });
+  },
+
+  createMockData: function() {
+    return [
         {
           sentence_id: 3,
           count: 4,
@@ -24,107 +79,40 @@ $.extend(beefApp, {
           sentence_id: 10,
           count: 9,
           sentence: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
-        },
-        {
-          sentence_id: 12,
-          count: 15,
-          sentence: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        },
-        {
-          sentence_id: 13,
-          count: 20,
-          sentence: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-        },
-        {
-          sentence_id: 16,
-          count: 12,
-          sentence: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
         }
       ];
-    }
-   
+  },
+
+  initVis: function (data, maxcount) {
+    
+    var esivis = $('#esi-vis');
+    var esiframe = esivis.find('iframe').contents();
+
+    this.visData = (location.href.match('http://beef.dev') || location.href.match('http://yle.fi')) ? data : this.createMockData();
+    this.visSentenceCount = maxcount ? parseInt(maxcount) : 16;
 
     var beefVis = $('<div class="beef-vis"></div>');
     esiframe.find('ul.some').before(beefVis);
 
-    var svg = d3.select(beefVis[0]).append('svg');
-    var info = d3.select(beefVis[0]).append('div').attr('class', 'info');
+    this.visSvg = d3.select(beefVis[0]).append('svg');
+    this.visInfo = d3.select(beefVis[0]).append('div').attr('class', 'info');
 
-    var width = svg.node().parentNode.offsetWidth;
-    var height = 100;
+    this.maxBeefValue = d3.max(this.visData, function(d) { return parseInt(d.count); });
 
-    var padding = 20;
-
-    var line = null;
-    var circles = null;
-
-    var resize = function() {
-      width = svg.node().parentNode.offsetWidth;
-      svg.attr('height', height + 'px');
-      svg.attr('width', width + 'px');
-
-      line.attr({
-        x1: 0,
-        y1: height / 2,
-        x2: width,
-        y2: height / 2,
-        'stroke': 'black',
-        'stroke-dasharray': '1, 3',
-        'stroke-width': '1px'
-      });
-
-      circles.attr({
-        cx: function(d, i) { return padding + (parseInt(d.sentence_id) * (width - (padding * 2)) / maxcount); },
-        cy: height / 2,
-        r: function(d, i) { return parseInt(d.count); }
-      });
-
-    };
-
-    var initShapes = function() {
-      line = svg.append('line');
-      circles = svg.selectAll('circle')
-                   .data(data)
-                   .enter()
-                   .append('circle')
-                   .style({
-                     'cursor': 'pointer'
-                   })
-                   .attr({
-                      fill: 'yellow',
-                      stroke: 'black',
-                      'stroke-width': '4px'
-                   });
-
-      circles.on('click', function(d) {
-
-        $('html, body').animate({
-          scrollTop: $('#sentence_' + d.sentence_id).offset().top
-        }, 500);
-      
-      });
-
-      circles.on('mouseover', function(d) {
-        d3.select(this).attr('fill', 'magenta');
-      });
-
-      circles.on('mouseout', function(d) {
-        d3.select(this).attr('fill', 'yellow');
-      });
-
-    };
-
-    window.addEventListener('resize', function() {
-      resize();
-    });
-
-    initShapes();
-    resize();
-
-    
-    
-
-
-
+    this.visLine = this.visSvg.append('line');
+    this.visCircles = this.visSvg.selectAll('circle')
+                                 .data(this.visData)
+                                 .enter()
+                                 .append('circle')
+                                 .style({
+                                   'cursor': 'pointer'
+                                 })
+                                 .attr({
+                                    fill: 'yellow',
+                                    stroke: 'black',
+                                    'stroke-width': '4px'
+                                 });
+    this.resizeVis();
+    this.initVisEvents();
   }
 });
