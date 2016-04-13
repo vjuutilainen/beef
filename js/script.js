@@ -46,11 +46,6 @@
         var esiframe = esivis.find('iframe').contents();
         // Store article id.
         beefApp.article_id = esiframe.find('body').data('articleid');
-        // Get beefs.
-        var data = {
-          article_id:beefApp.article_id
-        }
-        beefApp.getBeefs(data)
         // Add custom inline css.
         esiframe.find('head').append('<style type="text/css">p .sentence { background-color: #fff; transition: all 0.5s; } p .sentence:hover { background-color: #ff0; transition: all 2s; }</style>');
         // Add custom css file.
@@ -64,6 +59,13 @@
           });
           $(this).html(sentences);
         });
+        beefApp.maxSentences = i;
+
+        // Get beefs.
+        var data = {
+          article_id:beefApp.article_id
+        }
+        beefApp.getBeefs(data, beefApp.maxSentences);
 
         // Init frame events.
         beefApp.initIframeEvents(esiframe);
