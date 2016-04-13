@@ -80,6 +80,11 @@
     },
     initIframeEvents: function () {
       beefApp.frame.find('p .sentence').click(function () {
+        $(this).addClass('disabled');
+        var msg = $('<div class="msg">Beef\'d</div>').appendTo($(this));
+        window.setTimeout(function () {
+          msg.fadeOut(500).remove();
+        }, 1500);
         var data = {
           'article_id':beefApp.article_id,
           'sentence':$(this).data('sentence'),
@@ -126,9 +131,6 @@
     initEvents: function () {
       $(window).resize(function () {
         beefApp.getScale();
-      });
-      esivis.on('click', '.turnred', function () {
-        esivis.find('iframe').contents().find('p').css('color', 'red');
       });
     },
     init: function () {
