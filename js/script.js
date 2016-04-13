@@ -14,7 +14,8 @@
     },
     setPath: function () {
       if (location.href.match('http://yle.fi/')) {
-        beefApp.php_path = 'http://yle.fi/uutiset/alpha.yle.fi/plus/alpha/beef/';
+        // beefApp.php_path = 'http://yle.fi/uutiset/alpha.yle.fi/plus/alpha/beef/';
+        beefApp.php_path = 'http://alpha.yle.fi/plus/alpha/beef/';
       }
       else {
         beefApp.php_path = '';
@@ -40,16 +41,16 @@
     initIframe: function () {
       esivis.find('#iframe')[0].onload = function () {
         // Store frame contents.
-        var esiframe = esivis.find('iframe').contents();
+        beefApp.frame = esivis.find('iframe').contents();
         // Store article id.
-        beefApp.article_id = esiframe.find('body').data('articleid');
+        beefApp.article_id = beefApp.frame.find('body').data('articleid');
         // Add custom inline css.
-        esiframe.find('head').append('<style type="text/css">p .sentence { background-color: #fff; transition: all 0.5s; } p .sentence:hover { background-color: #ff0; transition: all 2s; } .beefinfo { padding: 20px; background-color: #f1f1f1; }</style>');
+        beefApp.frame.find('head').append('<style type="text/css">p .sentence { background-color: #fff; transition: all 0.5s; } p .sentence:hover { background-color: #ff0; transition: all 2s; } .beefinfo { font-family: georgia; font-size: 20px; } .highlight { border-bottom: 3px solid #000; display: inline-block; }</style>');
         // Add custom css file.
-        // esiframe.find('head').append('<link rel="stylesheet" href="http://yle.fi/plus/yle/alpha/impact.ly/css/styles.css?v=">')
+        // beefApp.frame.find('head').append('<link rel="stylesheet" href="http://yle.fi/plus/yle/alpha/impact.ly/css/styles.css?v=">')
         // Mark sentences.
         var i = 0;
-        esiframe.find('.text p').each(function () {
+        beefApp.frame.find('.text p').each(function () {
           var sentences = $(this).text().replace(/([^.!?]*[^.!?\s][.!?]['"]?)(\s|$)/g, function (val) {
             i++;
             return '<span class="sentence sentence_' + i + '" data-sentence="' + val.trim() + '" data-sentence-class="sentence_' + i + '" data-sentence-id="' + i + '">' + val + '</span>'
@@ -64,14 +65,20 @@
         }
         beefApp.getBeefs(data);
 
-        // Init frame events.
-        beefApp.initIframeEvents(esiframe);
+        window.setTimeout(function () {
+          window.setInterval(function () {
+            // beefApp.getBeefs(data, true);
+          }, 5000);
+        }, 5000);
 
-        esiframe.find('.text').after('<div class="beefinfo">WHERE WAS THA BEEF?!?!!??!??!!! YOU TELL US NOW BUT CLICK YOUR MOUSE OR MOBILE DEVICE\'S SCREEN.</div>')
+        // Init frame events.
+        beefApp.initIframeEvents(beefApp.frame);
+
+        beefApp.frame.find('.text').after('<div class="beefinfo">Where was the beef? Pleace select a sentence that best sums up the story.</div>')
       };
     },
-    initIframeEvents: function (esiframe) {
-      esiframe.find('p .sentence').click(function () {
+    initIframeEvents: function () {
+      beefApp.frame.find('p .sentence').click(function () {
         var data = {
           'article_id':beefApp.article_id,
           'sentence':$(this).data('sentence'),
@@ -82,7 +89,7 @@
       });
     },
     getBeefs: function (data, update) {
-      var get_parameter = (update === true) ? Date.now() / 1000 | 0 : ''; 
+      var get_parameter = (update === true) ? Date.now() / 1000 | 0 : '';
       $.ajax({
         data:data,
         dataType:'json',
@@ -91,9 +98,11 @@
             // Init vis.
             if (update === true) {
               beefApp.updateVis(data, beefApp.maxSentences);
+              beefApp.highLightBeefs(data);
             }
             else {
               beefApp.initVis(data, beefApp.maxSentences);
+              beefApp.highLightBeefs(data);
             }
           }
         },
