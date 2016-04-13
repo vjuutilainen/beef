@@ -52,7 +52,7 @@
         esiframe.find('.text p').each(function () {
           var sentences = $(this).text().replace(/([^.!?]*[^.!?\s][.!?]['"]?)(\s|$)/g, function (val) {
             i++;
-            return '<span class="sentence" data-sentence="' + val.trim() + '" data-sentence-class="sentence_' + i + '" data-sentence-id="' + i + '">' + val + '</span>'
+            return '<span class="sentence sentence_' + i + '" data-sentence="' + val.trim() + '" data-sentence-class="sentence_' + i + '" data-sentence-id="' + i + '">' + val + '</span>'
           });
           $(this).html(sentences);
         });
