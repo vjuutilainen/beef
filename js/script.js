@@ -65,7 +65,7 @@
         var data = {
           article_id:beefApp.article_id
         }
-        beefApp.getBeefs(data, beefApp.maxSentences);
+        beefApp.getBeefs(data);
 
         // Init frame events.
         beefApp.initIframeEvents(esiframe);
@@ -82,15 +82,19 @@
         beefApp.beefWord(data);
       });
     },
-    getBeefs: function (data) {
+    getBeefs: function (data, update) {
       $.ajax({
         data:data,
         dataType:'json',
         statusCode:{
           200: function (data) {
-            console.log(data)
             // Init vis.
-            beefApp.initVis(data);
+            if (update === true) {
+              // beefApp.updateVis(data, beefApp.maxSentences);
+            }
+            else {
+              beefApp.initVis(data, beefApp.maxSentences);
+            }
           }
         },
         url:'php/get.php',
@@ -103,7 +107,7 @@
         dataType:'json',
         statusCode:{
           200: function (data) {
-            alert('added');
+            beefApp.getBeefs({article_id: beefApp.article_id}, true);
           }
         },
         url:'php/post.php',
