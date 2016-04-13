@@ -44,7 +44,7 @@ $.extend(beefApp, {
     this.visCircles.on('click', function(d) {
       var esivis = $('#esi-vis');
       var y = (esivis.find('iframe').contents().find('.sentence_' + d.sentence_id).offset().top);
-      document.getElementById('iframe').contentWindow.setTimeout('this.scrollTo(0, ' + y + ');', 1);
+      esivis.find('iframe')[0].contentWindow.setTimeout('this.scrollTo(0, ' + y + ');', 1);
     });
 
   },
@@ -58,7 +58,7 @@ $.extend(beefApp, {
     this.visCircles.on('click', function(d) {
       var esivis = $('#esi-vis');
       var y = (esivis.find('iframe').contents().find('.sentence_' + d.sentence_id).offset().top);
-      document.getElementById('iframe').contentWindow.setTimeout('this.scrollTo(0, ' + y + ');', 1);
+      esivis.find('iframe')[0].contentWindow.setTimeout('this.scrollTo(0, ' + y + ');', 1);
     });
 
     this.visCircles.on('mouseover', function(d) {

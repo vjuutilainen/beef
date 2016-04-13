@@ -14,10 +14,11 @@
     },
     setPath: function () {
       if (location.href.match('http://yle.fi/')) {
-        // beefApp.php_path = 'http://yle.fi/uutiset/alpha.yle.fi/plus/alpha/beef/';
+        beefApp.path = 'http://yle.fi/plus/beef/';
         beefApp.php_path = 'http://alpha.yle.fi/plus/alpha/beef/';
       }
       else {
+        beefApp.path = '';
         beefApp.php_path = '';
       }  
     },
@@ -45,9 +46,9 @@
         // Store article id.
         beefApp.article_id = beefApp.frame.find('body').data('articleid');
         // Add custom inline css.
-        beefApp.frame.find('head').append('<style type="text/css">p .sentence { background-color: #fff; transition: all 0.5s; } p .sentence:hover { background-color: #ff0; transition: all 2s; } .beefinfo { font-family: georgia; font-size: 20px; } .highlight { border-bottom: 3px solid #000; display: inline-block; }</style>');
+        // beefApp.frame.find('head').append('<style type="text/css"></style>');
         // Add custom css file.
-        // beefApp.frame.find('head').append('<link rel="stylesheet" href="http://yle.fi/plus/yle/alpha/impact.ly/css/styles.css?v=">')
+        beefApp.frame.find('head').append('<link type="text/css" rel="stylesheet" href="' + beefApp.path + 'css/iframe.css">');
         // Mark sentences.
         var i = 0;
         beefApp.frame.find('.text p').each(function () {
@@ -96,13 +97,12 @@
         statusCode:{
           200: function (data) {
             // Init vis.
+            beefApp.highLightBeefs(data);
             if (update === true) {
               beefApp.updateVis(data, beefApp.maxSentences);
-              beefApp.highLightBeefs(data);
             }
             else {
               beefApp.initVis(data, beefApp.maxSentences);
-              beefApp.highLightBeefs(data);
             }
           }
         },
