@@ -1,6 +1,6 @@
 $.extend(beefApp, {
 
-  initVis: function (data) {
+  initVis: function (data) {
     
     var esivis = $('#esi-vis');
     var esiframe = esivis.find('iframe').contents();
@@ -42,6 +42,7 @@ $.extend(beefApp, {
     esiframe.find('ul.some').before(beefVis);
 
     var svg = d3.select(beefVis[0]).append('svg');
+    var info = d3.select(beefVis[0]).append('div').attr('class', 'info');
 
     var width = svg.node().parentNode.offsetWidth;
     var height = 100;
@@ -77,9 +78,24 @@ $.extend(beefApp, {
                    .data(data)
                    .enter()
                    .append('circle')
+                   .style({
+                     'cursor': 'pointer'
+                   })
                    .attr({
                       fill: 'cyan'
                    });
+
+      circles.on('click', function(d) {
+
+      });
+
+      circles.on('mouseover', function(d) {
+        d3.select(this).attr('fill', 'magenta');
+      });
+
+      circles.on('mouseout', function(d) {
+        d3.select(this).attr('fill', 'cyan');
+      });
 
     };
 
