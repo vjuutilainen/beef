@@ -80,7 +80,7 @@
     },
     initIframeEvents: function () {
       beefApp.frame.find('p .sentence').click(function () {
-        if ($(this).hasClass('disabled')) {
+        if ($(this).hasClass('disabled')) {
           return false;
         }
         $(this).addClass('disabled');
