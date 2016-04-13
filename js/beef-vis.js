@@ -28,7 +28,7 @@ $.extend(beefApp, {
 
     this.visCircles.on('click', function(d) {
       $('html, body').animate({
-        scrollTop: $('#sentence_' + d.sentence_id).offset().top
+        scrollTop: $('.sentence_' + d.sentence_id).offset().top
       }, 500);
     });
 
