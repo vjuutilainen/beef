@@ -45,9 +45,14 @@
         // Store frame contents.
         var esiframe = esivis.find('iframe').contents();
         // Store article id.
-        esiframe.find('body').data('data-articleid');
+        beefApp.article_id = esiframe.find('body').data('articleid');
+        // Get beefs.
+        var data = {
+          article_id:beefApp.article_id
+        }
+        beefApp.getBeefs(data)
         // Add custom inline css.
-        esiframe.find('head').append('<style type="text/css">p .sentence { background-color: #fff; transition: all 0.5s; } p .sentence:hover {  background-color: #ff0; transition: all 2s; }</style>');
+        esiframe.find('head').append('<style type="text/css">p .sentence { background-color: #fff; transition: all 0.5s; } p .sentence:hover { background-color: #ff0; transition: all 2s; }</style>');
         // Add custom css file.
         // esiframe.find('head').append('<link rel="stylesheet" href="http://yle.fi/plus/yle/alpha/impact.ly/css/styles.css?v=">')
         // Mark sentences.
@@ -55,12 +60,10 @@
         esiframe.find('.text p').each(function () {
           var sentences = $(this).text().replace(/([^.!?]*[^.!?\s][.!?]['"]?)(\s|$)/g, function (val) {
             i++;
-            return '<span class="sentence" data-contents="$1" data-sentence-id="sentence_' + i + '">' + val + '</span>$2'
+            return '<span class="sentence" data-contents="' + val.trim() + '" data-sentence-id="sentence_' + i + '">' + val + '</span>'
           });
           $(this).html(sentences);
         });
-        // Init vis.
-        beefApp.initVis();
 
         // Init frame events.
         beefApp.initIframeEvents(esiframe);
@@ -68,7 +71,28 @@
     },
     initIframeEvents: function (esiframe) {
       esiframe.find('p .sentence').click(function () {
-        beefApp.beefWord();
+        var data = {
+          'article_id':beefApp.article_id,
+          'sentence':$(this).data('contents'),
+          'sentence_id':$(this).data('sentence-id')
+        }
+        beefApp.beefWord(data);
+      });
+    },
+    getBeefs: function (data) {
+      console.log(data)
+      $.ajax({
+        data:data,
+        dataType:'json',
+        statusCode:{
+          200: function (data) {
+            // Init vis.
+            console.log(data)
+            beefApp.initVis();
+          }
+        },
+        url:'php/get.php',
+        type:'GET'
       });
     },
     beefWord: function (data) {
@@ -81,7 +105,7 @@
           }
         },
         url:'php/post.php',
-        type:'GET'
+        type:'POST'
       });
     },
     initEvents: function () {
