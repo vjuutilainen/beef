@@ -88,7 +88,7 @@
           200: function (data) {
             // Init vis.
             if (update === true) {
-              // beefApp.updateVis(data, beefApp.maxSentences);
+              beefApp.updateVis(data, beefApp.maxSentences);
             }
             else {
               beefApp.initVis(data, beefApp.maxSentences);
