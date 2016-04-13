@@ -1,5 +1,5 @@
 $.extend(beefApp, {
-  initVis: function () {
+  initVis: function () {
 
   }
 });

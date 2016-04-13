@@ -1,6 +1,6 @@
 (function ($) {
   var esivis = $('#esi-vis');
-  var beefApp = {
+  beefApp = {
     formatNr: function (x, addComma) {
       x = x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '&nbsp;');
       x = x.replace('.', ',');
@@ -44,23 +44,24 @@
       esivis.find('#iframe')[0].onload = function () {
         // Store frame contents.
         var esiframe = esivis.find('iframe').contents();
+        // Store article id.
+        esiframe.find('body').data('data-articleid');
         // Add custom inline css.
         esiframe.find('head').append('<style type="text/css">p .sentence { background-color: #fff; transition: all 0.5s; } p .sentence:hover {  background-color: #ff0; transition: all 2s; }</style>');
         // Add custom css file.
         // esiframe.find('head').append('<link rel="stylesheet" href="http://yle.fi/plus/yle/alpha/impact.ly/css/styles.css?v=">')
         // Mark sentences.
+        var i = 0;
         esiframe.find('.text p').each(function () {
           var sentences = $(this).text().replace(/([^.!?]*[^.!?\s][.!?]['"]?)(\s|$)/g, function (val) {
-            return '<span class="sentence" data-contents="$1">'+val+'</span>$2'
+            i++;
+            return '<span class="sentence" data-contents="$1" data-sentence-id="sentence_' + i + '">' + val + '</span>$2'
           });
           $(this).html(sentences);
         });
         // Init vis.
         beefApp.initVis();
 
-        $.extend(beefApp, {
-
-        });
         // Init frame events.
         beefApp.initIframeEvents(esiframe);
       };
