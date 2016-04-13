@@ -135,7 +135,7 @@ $.extend(beefApp, {
     this.maxBeefValue = d3.max(this.visData, function(d) { return parseInt(d.count); });
 
     this.visLine = this.visSvg.append('line');
-    
+
     this.visCircles = this.visSvg.selectAll('circle')
                                  .data(this.visData)
                                  .enter()
@@ -150,7 +150,7 @@ $.extend(beefApp, {
                                  });
 
     var sorted = this.visData.sort(function(a, b) { return parseInt(a.count) > parseInt(b.count) ? -1 : parseInt(a.count) < parseInt(b.count) ? 1 : 0; });
-    this.visInfo.html('<p style="font-size:12px;font-family:Helvetica"><span style="font-weight:bold">Missä on asian pihvi?</span><br> ' + sorted[0].sentence + ' <span style="font-style:italic">(' + sorted[0].count + ' beefiä)</span></p>');
+    this.visInfo.html('<p><span class="infotitle">Missä on asian pihvi?</span><br> ' + sorted[0].sentence + ' <span class="infocount">(' + sorted[0].count + ' beefiä)</span></p>');
 
     this.resizeVis();
     this.initVisEvents();
