@@ -55,7 +55,7 @@
         esiframe.find('.text p').each(function () {
           var sentences = $(this).text().replace(/([^.!?]*[^.!?\s][.!?]['"]?)(\s|$)/g, function (val) {
             i++;
-            return '<span class="sentence" data-sentence="' + val.trim() + '" data-sentence-class="sentence_' + i + '" data-sentence-id="1">' + val + '</span>'
+            return '<span class="sentence" data-sentence="' + val.trim() + '" data-sentence-class="sentence_' + i + '" data-sentence-id="' + i + '">' + val + '</span>'
           });
           $(this).html(sentences);
         });
@@ -88,6 +88,7 @@
         dataType:'json',
         statusCode:{
           200: function (data) {
+            console.log(data)
             // Init vis.
             beefApp.initVis(data);
           }
