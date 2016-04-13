@@ -1,7 +1,6 @@
 $.extend(beefApp, {
 
   initVis: function (data, maxcount) {
-    
     var esivis = $('#esi-vis');
     var esiframe = esivis.find('iframe').contents();
 
