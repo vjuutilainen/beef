@@ -1,5 +1,5 @@
 $.extend(beefApp, {
-<<<<<<< HEAD
+
   initVis: function () {
     console.log(d3);
     var data = [
@@ -33,11 +33,8 @@ $.extend(beefApp, {
         count: 12,
         sentence: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
       }
-    ];   
+    ];
 
-=======
-  initVis: function () {
-    console.log(d3);
->>>>>>> 2bdc5cd663305a9df66da0cf09a51f6f2b1080bc
+    
   }
 });
