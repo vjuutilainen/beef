@@ -5,6 +5,8 @@ $.extend(beefApp, {
     var esivis = $('#esi-vis');
     var esiframe = esivis.find('iframe').contents();
 
+    var maxcount = parseInt(maxcount);
+
     if(!location.href.match('http://beef.dev')) {
       var maxcount = 16;
       var data = [
@@ -72,7 +74,7 @@ $.extend(beefApp, {
       });
 
       circles.attr({
-        cx: function(d, i) { return padding + (d.sentence_id * (width - (padding * 2)) / maxcount); },
+        cx: function(d, i) { return padding + (parseInt(d.sentence_id) * (width - (padding * 2)) / maxcount); },
         cy: height / 2,
         r: function(d, i) { return d.count; }
       });
@@ -96,6 +98,10 @@ $.extend(beefApp, {
 
       circles.on('click', function(d) {
 
+        $('html, body').animate({
+          scrollTop: $('sentence_' + d.sentence_id).offset().top
+        }, 500);
+      
       });
 
       circles.on('mouseover', function(d) {
