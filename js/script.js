@@ -1,6 +1,6 @@
 (function ($) {
   var esivis = $('#esi-vis');
-  var yleApp = {
+  var beefApp = {
     formatNr: function (x, addComma) {
       x = x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '&nbsp;');
       x = x.replace('.', ',');
@@ -14,13 +14,13 @@
     },
     setPath: function () {
       if (location.href.match('http://yle.fi/plus/yle')) {
-        yleApp.path = 'http://yle.fi/plus/yle/2016/' + yleApp.projectName + '/';
+        beefApp.path = 'http://yle.fi/plus/yle/2016/' + beefApp.projectName + '/';
       }
       else if (location.href.match('http://yle.fi')) {
-        yleApp.path = 'http://yle.fi/plus/2016/' + yleApp.projectName + '/';
+        beefApp.path = 'http://yle.fi/plus/2016/' + beefApp.projectName + '/';
       }
       else {
-        yleApp.path = '2016/' + yleApp.projectName + '/';
+        beefApp.path = '2016/' + beefApp.projectName + '/';
       }
     },
     getScale: function () {
@@ -37,7 +37,7 @@
     },
     initMediaUrls: function () {
       $.each($('.handle_img', esivis), function (i, el) {
-        $(this).attr('src', yleApp.path + 'img/' + $(this).attr('data-src'));
+        $(this).attr('src', beefApp.path + 'img/' + $(this).attr('data-src'));
       });
     },
     initIframe: function () {
@@ -50,51 +50,58 @@
         // esiframe.find('head').append('<link rel="stylesheet" href="http://yle.fi/plus/yle/alpha/impact.ly/css/styles.css?v=">')
         // Mark sentences.
         esiframe.find('.text p').each(function () {
-          var sentences = $(this).text().replace(/([^.!?]*[^.!?\s][.!?]['"]?)(\s|$)/g, '<span class="sentence">$1</span>$2');
+          var sentences = $(this).text().replace(/([^.!?]*[^.!?\s][.!?]['"]?)(\s|$)/g, function (val) {
+            return '<span class="sentence" data-contents="$1">'+val+'</span>$2'
+          });
           $(this).html(sentences);
         });
+        // Init vis.
+        beefApp.initVis();
+
+        $.extend(beefApp, {
+
+        });
         // Init frame events.
-        yleApp.initIframeEvents(esiframe);
+        beefApp.initIframeEvents(esiframe);
       };
     },
     initIframeEvents: function (esiframe) {
-        esiframe.find('p .sentence').click(function () {
-          yleApp.beefWord();
-        });
-      };
+      esiframe.find('p .sentence').click(function () {
+        beefApp.beefWord();
+      });
     },
-    beefWord: function (data) {
+    beefWord: function (data) {
       $.ajax({
         data:data,
         dataType:'json',
         statusCode:{
           200: function (data) {
-            $.each(data, function (i, value) {
-              $('<option class="' + type + '" value="' + type + ':' + value['tag_id'] + '">' + value['name'] + '</option>').appendTo($('#' + type));
-            });
+            alert('added');
           }
         },
-        url:'/api/' + type + '/get',
+        url:'php/post.php',
         type:'GET'
       });
     },
     initEvents: function () {
       $(window).resize(function () {
-        yleApp.getScale();
+        beefApp.getScale();
       });
       esivis.on('click', '.turnred', function () {
         esivis.find('iframe').contents().find('p').css('color', 'red');
       });
     },
     init: function () {
-      yleApp.projectName = '';
-      yleApp.setPath();
-      yleApp.getScale();
-      yleApp.initMediaUrls();
-      yleApp.initEvents();
+      beefApp.projectName = '';
+      beefApp.setPath();
+      beefApp.getScale();
+      beefApp.initMediaUrls();
+      beefApp.initEvents();
+
+      beefApp.initIframe();
     }
   };
   $(document).ready(function () {
-    yleApp.init();
+    beefApp.init();
   });
 })(jQuery);
