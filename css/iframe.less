@@ -1,15 +1,35 @@
 p {
   .sentence {
+    position: relative;
     background-color: #fff;
     transition: all 0.5s;
     &:hover {
       background-color: #ff0; transition: all 2s;
     }
+    &.disabled {
+      &:hover {
+        background-color: #fff;
+      }
+    }
     &.highlight {
       font-weight: bold;
+    }
+    .msg {
+      background-color: #fff;
+      float: right;
+      font-family: georgia;
+      font-size: 20px;
+      font-weight: bold;
+      left: 50%;
+      padding: 10px;
+      position: absolute;
+      top: 0;
+      z-index: 2;
     }
   } 
 } 
 .beefinfo {
-  font-family: georgia; font-size: 20px; margin: 20px 0 40px 0;
+  font-family: georgia; 
+  font-size: 20px; 
+  margin: 20px 0 40px 0;
 } 
