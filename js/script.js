@@ -40,19 +40,43 @@
         $(this).attr('src', yleApp.path + 'img/' + $(this).attr('data-src'));
       });
     },
-    initIframeEvents: function () {
+    initIframe: function () {
       esivis.find('#iframe')[0].onload = function () {
+        // Store frame contents.
         var esiframe = esivis.find('iframe').contents();
-        // esiframe.find('head').append('<link rel="stylesheet" href="http://yle.fi/plus/yle/alpha/impact.ly/css/styles.css?v=">')
+        // Add custom inline css.
         esiframe.find('head').append('<style type="text/css">p .sentence { background-color: #fff; transition: all 0.5s; } p .sentence:hover {  background-color: #ff0; transition: all 2s; }</style>');
+        // Add custom css file.
+        // esiframe.find('head').append('<link rel="stylesheet" href="http://yle.fi/plus/yle/alpha/impact.ly/css/styles.css?v=">')
+        // Mark sentences.
         esiframe.find('.text p').each(function () {
           var sentences = $(this).text().replace(/([^.!?]*[^.!?\s][.!?]['"]?)(\s|$)/g, '<span class="sentence">$1</span>$2');
           $(this).html(sentences);
         });
+        // Init frame events.
+        yleApp.initIframeEvents(esiframe);
+      };
+    },
+    initIframeEvents: function (esiframe) {
         esiframe.find('p .sentence').click(function () {
           yleApp.beefWord();
         });
       };
+    },
+    beefWord: function (data) {
+      $.ajax({
+        data:data,
+        dataType:'json',
+        statusCode:{
+          200: function (data) {
+            $.each(data, function (i, value) {
+              $('<option class="' + type + '" value="' + type + ':' + value['tag_id'] + '">' + value['name'] + '</option>').appendTo($('#' + type));
+            });
+          }
+        },
+        url:'/api/' + type + '/get',
+        type:'GET'
+      });
     },
     initEvents: function () {
       $(window).resize(function () {
@@ -68,9 +92,6 @@
       yleApp.getScale();
       yleApp.initMediaUrls();
       yleApp.initEvents();
-
-
-      yleApp.initIframeEvents();
     }
   };
   $(document).ready(function () {
