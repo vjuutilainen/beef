@@ -27,9 +27,11 @@ $.extend(beefApp, {
     }.bind(this));
 
     this.visCircles.on('click', function(d) {
-      $('html, body').animate({
-        scrollTop: $('.sentence_' + d.sentence_id).offset().top
-      }, 500);
+      var esivis = $('#esi-vis');
+      var y = (esivis.find('iframe').contents().find('.sentence_' + d.sentence_id).offset().top);
+
+      document.getElementById("iframe").contentWindow.setTimeout('this.scrollTo(0, ' + y + ');', 1);
+
     });
 
     this.visCircles.on('mouseover', function(d) {
