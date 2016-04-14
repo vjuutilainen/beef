@@ -190,7 +190,7 @@ $.extend(beefApp, {
       var radius = matches.length > 0 ? parseInt(matches[0].count) / _this.maxBeefValue * _this.circleMaxVertRadius : 0;
 
       $(e)
-        .css('right', '10px')
+        .css('right', '-10px')
         .css('width', '20px')
         .css('height', '20px');
       
