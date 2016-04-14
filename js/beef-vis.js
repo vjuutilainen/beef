@@ -39,7 +39,7 @@ $.extend(beefApp, {
       
 
     join.attr({
-      fill: function(d, i) { return parseInt(d.count) === _this.maxBeefValue ? 'rgba(225,0,90,0.3)' : 'rgba(255,255,0,0.7)'; },
+      fill: function(d, i) { return parseInt(d.count) === _this.maxBeefValue ? 'rgba(240,130,175,1)' : 'rgba(255,220,0,1)'; },
       cx: function(d, i) { return this.visPadding + (parseInt(d.sentence_id) * (this.visWidth - (this.visPadding * 2)) / this.visSentenceCount); }.bind(this),
       cy: this.visHeight / 2,
       r: function(d, i) { 
@@ -86,13 +86,13 @@ $.extend(beefApp, {
 
     this.visCircles.on('mouseover', function(d) {
       d3.select(this).attr('fill', function(d, i) {
-        return parseInt(d.count) === _this.maxBeefValue ? 'rgba(225,0,90,0.5)' : 'rgba(255,255,0,1)';
+        return parseInt(d.count) === _this.maxBeefValue ? 'rgba(240,130,175,1)' : 'rgba(255,220,0,1)';
       });
     });
 
     this.visCircles.on('mouseout', function(d) {
       d3.select(this).attr('fill', function(d, i) {
-        return parseInt(d.count) === _this.maxBeefValue ? 'rgba(225,0,90,0.3)' : 'rgba(255,255,0,0.7)';
+        return parseInt(d.count) === _this.maxBeefValue ? 'rgba(240,130,175,1)' : 'rgba(255,220,0,1)';
       });
     });
   },
@@ -108,7 +108,7 @@ $.extend(beefApp, {
       y1: this.visHeight / 2,
       x2: this.visWidth,
       y2: this.visHeight / 2,
-      'stroke': 'black',
+      'stroke': '#e1e1e1',
       'stroke-dasharray': '1, 3',
       'stroke-width': '1px'
     });
@@ -128,7 +128,7 @@ $.extend(beefApp, {
       y1: 0,
       x2: this.vertVisWidth / 2,
       y2: '10000', // !!!
-      'stroke': 'black',
+      'stroke': '#e1e1e1',
       'stroke-dasharray': '1, 3',
       'stroke-width': '1px'
     });
@@ -211,7 +211,7 @@ $.extend(beefApp, {
         svg.append('circle')
             .attr({
               r: radius,
-              fill: function() { return matches[0] && parseInt(matches[0].count) === _this.maxBeefValue ? 'rgba(225,0,90,0.3)' : 'rgba(255,255,0,0.7)'; },
+              fill: function() { return matches[0] && parseInt(matches[0].count) === _this.maxBeefValue ? 'rgba(240,130,175,1)' : 'rgba(255,220,0,1)'; },
               cx: (20 / 2),
               cy: (20 / 2)
             });
@@ -222,7 +222,7 @@ $.extend(beefApp, {
           .select('circle')
           .attr({
               r: radius,
-              fill: function() { return matches[0] && parseInt(matches[0].count) === _this.maxBeefValue ? 'rgba(225,0,90,0.3)' : 'rgba(255,255,0,0.7)'; },
+              fill: function() { return matches[0] && parseInt(matches[0].count) === _this.maxBeefValue ? 'rgba(240,130,175,1)' : 'rgba(255,220,0,1)'; },
               cx: (20 / 2),
               cy: (20 / 2)
           });
@@ -249,8 +249,6 @@ $.extend(beefApp, {
     this.visData = (location.href.match('http://beef.dev') || location.href.match('http://yle.fi')) ? data : this.createMockData();
     this.visSentenceCount = maxcount ? parseInt(maxcount) : 16;
 
-
-
     var beefVis = $('<div class="beef-vis"></div>');
     this.frame.find('article.content .hgroup h2').after(beefVis);
 
@@ -260,11 +258,6 @@ $.extend(beefApp, {
     this.maxBeefValue = d3.max(this.visData, function(d) { return parseInt(d.count); });
 
     this.visLine = this.visSvg.append('line');
-
-    // this.visSvg
-    //     .append('g')
-    //     .attr('transform', 'scale(0.1)')
-    //     .html(this.burgerPath);
 
     this.visCircles = this.visSvg.selectAll('circle')
                                  .data(this.visData)
@@ -277,7 +270,7 @@ $.extend(beefApp, {
 
     if(data.length > 0) {
       var sorted = this.visData.sort(function(a, b) { return parseInt(a.count) > parseInt(b.count) ? -1 : parseInt(a.count) < parseInt(b.count) ? 1 : 0; });
-      this.visInfo.html('<p><span class="infotitle">Missä on asian pihvi?</span><br> ' + sorted[0].sentence + ' <span class="infocount">(' + sorted[0].count + ')</span></p>');
+      this.visInfo.html('<p><span class="infotitle">Missä on asian pihvi?</span>' + sorted[0].sentence + ' <span class="infocount">(' + sorted[0].count + ')</span></p>');
     }
 
     this.initVisEvents();
