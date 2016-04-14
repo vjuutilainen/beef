@@ -249,8 +249,6 @@ $.extend(beefApp, {
     this.visData = (location.href.match('http://beef.dev') || location.href.match('http://yle.fi')) ? data : this.createMockData();
     this.visSentenceCount = maxcount ? parseInt(maxcount) : 16;
 
-
-
     var beefVis = $('<div class="beef-vis"></div>');
     this.frame.find('article.content .hgroup h2').after(beefVis);
 
@@ -260,11 +258,6 @@ $.extend(beefApp, {
     this.maxBeefValue = d3.max(this.visData, function(d) { return parseInt(d.count); });
 
     this.visLine = this.visSvg.append('line');
-
-    // this.visSvg
-    //     .append('g')
-    //     .attr('transform', 'scale(0.1)')
-    //     .html(this.burgerPath);
 
     this.visCircles = this.visSvg.selectAll('circle')
                                  .data(this.visData)
@@ -277,7 +270,7 @@ $.extend(beefApp, {
 
     if(data.length > 0) {
       var sorted = this.visData.sort(function(a, b) { return parseInt(a.count) > parseInt(b.count) ? -1 : parseInt(a.count) < parseInt(b.count) ? 1 : 0; });
-      this.visInfo.html('<p><span class="infotitle">Missä on asian pihvi?</span><br> ' + sorted[0].sentence + ' <span class="infocount">(' + sorted[0].count + ')</span></p>');
+      this.visInfo.html('<p><span class="infotitle">Missä on asian pihvi?</span>' + sorted[0].sentence + ' <span class="infocount">(' + sorted[0].count + ')</span></p>');
     }
 
     this.initVisEvents();
