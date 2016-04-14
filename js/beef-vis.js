@@ -56,7 +56,7 @@ $.extend(beefApp, {
 
     if(data.length > 0) {
      var sorted = this.visData.sort(function(a, b) { return parseInt(a.count) > parseInt(b.count) ? -1 : parseInt(a.count) < parseInt(b.count) ? 1 : 0; });
-     this.visInfo.html('<p><span class="infotitle">Missä on asian pihvi?</span><br> ' + sorted[0].sentence + ' <span class="infocount">(' + sorted[0].count + ' beefiä)</span></p>');
+     this.visInfo.html('<p><span class="infotitle">Missä on asian pihvi?</span><br> ' + sorted[0].sentence + ' <span class="infocount">(' + sorted[0].count + ')</span></p>');
     }
 
     this.initVisEvents();
@@ -271,10 +271,8 @@ $.extend(beefApp, {
                                  .append('circle')
                                  .style({
                                    'cursor': 'pointer'
-                                 })
-                                 .attr({
-                                    fill: function(d, i) { return parseInt(d.count) === _this.maxBeefValue ? 'rgba(225,0,90,0.3)' : 'rgba(255,255,0,0.7)'; }
                                  });
+                                
 
     if(data.length > 0) {
       var sorted = this.visData.sort(function(a, b) { return parseInt(a.count) > parseInt(b.count) ? -1 : parseInt(a.count) < parseInt(b.count) ? 1 : 0; });
