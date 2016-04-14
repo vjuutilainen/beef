@@ -132,9 +132,11 @@
             beefApp.highLightBeefs(data);
             if (update === true) {
               beefApp.updateVis(data, beefApp.maxSentences);
+              beefApp.updateVerticalVis(data, beefApp.maxSentences);
             }
             else {
               beefApp.initVis(data, beefApp.maxSentences);
+              beefApp.initVerticalVis(data, beefApp.maxSentences);
             }
           }
         },
