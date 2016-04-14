@@ -1,3 +1,21 @@
+var mockdata = [
+  {
+    sentence_id: 3,
+    count: 4,
+    sentence: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+  },
+  {
+    sentence_id: 5,
+    count: 5,
+    sentence: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+  },
+  {
+    sentence_id: 10,
+    count: 9,
+    sentence: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+  }
+];
+
 $.extend(beefApp, {
 
   burgerPath: '<path d="M20.4,180v11.8c0,38.2,31.1,38.2,31.1,38.2h182.1c0,0,31.1-0.3,31.1-38.2V180H20.4z"/><path d="M112.2,0C20.4,0,20.4,70.3,20.4,70.3V100h244.3V70.3c0,0,0-70.3-91.8-70.3H112.2z"/><line style="fill:none;stroke:#000000;stroke-width:40;stroke-linecap:round;" x1="20" y1="140" x2="265" y2="140"/>',
@@ -14,50 +32,31 @@ $.extend(beefApp, {
   maxBeefValue: 0,
   circleMaxRadius: 15,
   circleMaxVertRadius: 10,
-
-  vertVisGroups: null,
+  topVisColor: 'rgba(240,130,175,1)',
+  visColor: 'rgba(255,220,0,1)',
 
   updateVis: function(data, maxcount) {
-
     var _this = this;
-    
-    this.visData = (location.href.match('http://beef.dev') || location.href.match('http://yle.fi')) ? data : this.createMockData();
-    this.visSentenceCount = maxcount ? parseInt(maxcount) : 16;
-
-    this.visSentenceCount = parseInt(maxcount);
-    this.maxBeefValue = d3.max(this.visData, function(d) { return parseInt(d.count); });
-
+    this.handleData(data, maxcount);
     var join = this.visCircles.data(this.visData);
-
     join.exit().remove();
-
     join.enter()
         .append('circle')
         .style({
-          'cursor': 'pointer'
+          cursor: 'pointer'
         });
-      
     join.attr({
-      fill: function(d, i) { return parseInt(d.count) === _this.maxBeefValue ? 'rgba(240,130,175,1)' : 'rgba(255,220,0,1)'; },
+      fill: function(d, i) { return parseInt(d.count) === _this.maxBeefValue ? _this.topVisColor : _this.visColor; },
       cx: function(d, i) { return this.visPadding + (parseInt(d.sentence_id) * (this.visWidth - (this.visPadding * 2)) / this.visSentenceCount); }.bind(this),
       cy: this.visHeight / 2,
       r: function(d, i) { 
         return parseInt(d.count) / this.maxBeefValue * this.circleMaxRadius; 
       }.bind(this)
     });
-
-    this.visCircles = join;
-
-    this.visCircles.on('click', function(d) {
-      var esivis = $('#esi-vis');
-      var y = (esivis.find('iframe').contents().find('.sentence_' + d.sentence_id).offset().top);
-      esivis.find('iframe')[0].contentWindow.setTimeout('this.scrollTo(0, ' + (y - 50) + ');', 1);
-    });
-
     this.initVisEvents();
+    this.visCircles = join;
     this.resizeVis();
     if(data.length > 0) this.updateVisInfo();
-   
   },
 
   initVisEvents: function() {
@@ -81,7 +80,7 @@ $.extend(beefApp, {
 
     this.visCircles.on('mouseover', function(d) {
       d3.select(this).attr('fill', function(d, i) {
-        return parseInt(d.count) === _this.maxBeefValue ? 'rgba(240,130,175,1)' : 'rgba(255,220,0,1)';
+        return parseInt(d.count) === _this.maxBeefValue ? _this.topVisColor : _this.visColor;
       })
       .attr('r', function(d, i) { 
         return (parseInt(d.count) / _this.maxBeefValue * _this.circleMaxRadius) + 1; 
@@ -90,7 +89,7 @@ $.extend(beefApp, {
 
     this.visCircles.on('mouseout', function(d) {
       d3.select(this).attr('fill', function(d, i) {
-        return parseInt(d.count) === _this.maxBeefValue ? 'rgba(240,130,175,1)' : 'rgba(255,220,0,1)';
+        return parseInt(d.count) === _this.maxBeefValue ? _this.topVisColor : _this.visColor;
       })
       .attr('r', function(d, i) { 
         return parseInt(d.count) / _this.maxBeefValue * _this.circleMaxRadius; 
@@ -105,9 +104,9 @@ $.extend(beefApp, {
     this.visSvg.attr('width', this.visWidth + 'px');
 
     this.visLine.attr({
-      x1: 0,
+      x1: this.visPadding,
       y1: this.visHeight / 2,
-      x2: this.visWidth,
+      x2: this.visWidth - this.visPadding,
       y2: this.visHeight / 2,
       'stroke': '#e1e1e1',
       'stroke-width': '1px'
@@ -134,31 +133,9 @@ $.extend(beefApp, {
 
   },
 
-  createMockData: function() {
-    return [
-        {
-          sentence_id: 3,
-          count: 4,
-          sentence: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
-        },
-        {
-          sentence_id: 5,
-          count: 5,
-          sentence: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-        },
-        {
-          sentence_id: 10,
-          count: 9,
-          sentence: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
-        }
-      ];
-  },
-
   initVerticalVis: function(data, maxcount) {
 
-    this.visData = (location.href.match('http://beef.dev') || location.href.match('http://yle.fi')) ? data : this.createMockData();
-
-    this.visSentenceCount = maxcount ? parseInt(maxcount) : 16;
+    this.handleData(data, maxcount);
 
     var beefVert = $('<div></div>').css('position', 'relative');
 
@@ -181,8 +158,7 @@ $.extend(beefApp, {
 
   updateVerticalVis(data, maxcount) {
 
-    this.visData = (location.href.match('http://beef.dev') || location.href.match('http://yle.fi')) ? data : this.createMockData();
-    this.visSentenceCount = maxcount ? parseInt(maxcount) : 16;
+    this.handleData(data, maxcount);
 
     var sentences = this.frame.find('.side_viz');
     var _this = this;
@@ -199,8 +175,6 @@ $.extend(beefApp, {
         .css('width', '20px')
         .css('height', '20px');
       
-      
-
       if(d3.select(e).select('svg')[0][0] === null) {
         var svg = d3.select(e)
                      .append('svg')
@@ -210,7 +184,7 @@ $.extend(beefApp, {
         svg.append('circle')
             .attr({
               r: radius,
-              fill: function() { return matches[0] && parseInt(matches[0].count) === _this.maxBeefValue ? 'rgba(240,130,175,1)' : 'rgba(255,220,0,1)'; },
+              fill: function() { return matches[0] && parseInt(matches[0].count) === _this.maxBeefValue ? _this.topVisColor : _this.visColor; },
               cx: (20 / 2),
               cy: (20 / 2)
             });
@@ -221,7 +195,7 @@ $.extend(beefApp, {
           .select('circle')
           .attr({
               r: radius,
-              fill: function() { return matches[0] && parseInt(matches[0].count) === _this.maxBeefValue ? 'rgba(240,130,175,1)' : 'rgba(255,220,0,1)'; },
+              fill: function() { return matches[0] && parseInt(matches[0].count) === _this.maxBeefValue ? _this.topVisColor : _this.visColor; },
               cx: (20 / 2),
               cy: (20 / 2)
           });
@@ -238,23 +212,38 @@ $.extend(beefApp, {
     this.visInfo.html('<p><span class="infotitle">Missä on asian pihvi?</span>' + sorted[0].sentence + ' <span class="infocount">(' + sorted[0].count + ')</span></p>');
   },
 
-  initVis: function (data, maxcount) {
-
-    var _this = this;
-
-    this.visData = (location.href.match('http://beef.dev') || location.href.match('http://yle.fi')) ? data : this.createMockData();
+  handleData(data, maxcount) {
+    this.visData = (location.href.match('http://beef.dev') || location.href.match('http://yle.fi')) ? data : mockdata;
     this.visSentenceCount = maxcount ? parseInt(maxcount) : 16;
+    this.maxBeefValue = d3.max(this.visData, function(d) { return parseInt(d.count); });
+  },
 
-    var beefVis = $('<div class="beef-vis"></div>');
+  initVis: function (data, maxcount) {
+    
+    this.handleData(data, maxcount);
+    var beefVis = $('<div style="position:relative" class="beef-vis"></div>');
+
+    var left = $('<img src="' + beefApp.path + 'img/start.png">').css({
+      position: 'absolute',
+      left: '0px',
+      top: '15px',
+      width: '15px'
+    });
+
+    var right = $('<img src="' + beefApp.path + 'img/end.png">').css({
+      position: 'absolute',
+      right: '0px',
+      top: '15px',
+      width: '15px'
+    });
+
+    beefVis.append(left);
+    beefVis.append(right);
+
     this.frame.find('article.content .hgroup h2').after(beefVis);
-
     this.visSvg = d3.select(beefVis[0]).append('svg');
     this.visInfo = d3.select(beefVis[0]).append('div').attr('class', 'info');
-
-    this.maxBeefValue = d3.max(this.visData, function(d) { return parseInt(d.count); });
-
     this.visLine = this.visSvg.append('line');
-
     this.visCircles = this.visSvg.selectAll('circle')
                                  .data(this.visData)
                                  .enter()
@@ -262,8 +251,6 @@ $.extend(beefApp, {
                                  .style({
                                    'cursor': 'pointer'
                                  });
-
-    this.initVisEvents();
-    
   }
+
 });
