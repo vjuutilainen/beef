@@ -110,7 +110,7 @@
         sentence.addClass('beefd');
         window.setTimeout(function () {
           sentence.removeClass('beefd');
-        }, 1500);
+        }, 2000);
       });
     },
     getBeefs: function (data, update) {
