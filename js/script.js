@@ -94,7 +94,8 @@
       }, 3000);
       burger.click(function () {
         $(this).hide();
-        var msg = $('<div class="msg">Beef\'d</div>').appendTo(beefApp.frame.find('.' + $(this).data('sentence-class')));
+        var sentence = beefApp.frame.find('.' + $(this).data('sentence-class'));
+        var msg = $('<div class="msg">Beef\'d</div>').appendTo(sentence);
         window.setTimeout(function () {
           msg.fadeOut(500);
         }, 1500);
@@ -105,8 +106,11 @@
           'sentence_id':$(this).data('sentence-id')
         }
         beefApp.beefWord(data);
+        sentence.addClass('beefd');
+        window.setTimeout(function () {
+          sentence.removeClass('beefd');
+        }, 1500);
       });
-      
     },
     getBeefs: function (data, update) {
       var get_parameter = (update === true) ? Date.now() / 1000 | 0 : '';
