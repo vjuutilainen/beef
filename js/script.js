@@ -84,7 +84,17 @@
           return false;
         }
         $(this).addClass('disabled');
-        var msg = $('<div class="msg">Beef\'d</div>').appendTo($(this));
+        beefApp.addBurger($(this));
+      });
+    },
+    addBurger: function (element) {
+      var burger = $('<div class="burger" data-sentence="' + element.data('sentence') + '" data-sentence-class="' + element.data('sentence-class') + '" data-sentence-id="' + element.data('sentence-id') + '"><img src="' + beefApp.path + 'img/burger.png" alt="" /></div>').appendTo(element);
+      window.setTimeout(function () {
+        burger.fadeOut(500);
+      }, 3000);
+      burger.click(function () {
+        $(this).hide();
+        var msg = $('<div class="msg">Beef\'d</div>').appendTo(beefApp.frame.find('.' + $(this).data('sentence-class')));
         window.setTimeout(function () {
           msg.fadeOut(500);
         }, 1500);
@@ -96,6 +106,7 @@
         }
         beefApp.beefWord(data);
       });
+      
     },
     getBeefs: function (data, update) {
       var get_parameter = (update === true) ? Date.now() / 1000 | 0 : '';
