@@ -5,7 +5,9 @@ p {
     transition: all 0.5s;
     &.beefd,
     &.clicked {
-      background-color: #ff0; transition: all 2s;
+      background-color: #ff0 !important;
+      transition: all 3s;
+      text-decoration: none;
     }
     &.burgered {
       text-decoration: underline;
@@ -14,7 +16,7 @@ p {
     }
     &.highlight {
       &.highlight_0 {
-        background-color: rgba(255, 255, 0, 0.5);
+        background-color: rgba(225, 0, 90, 0.15);
       }
       &.highlight_1,
       &.highlight_2 {
