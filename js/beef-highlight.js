@@ -5,7 +5,13 @@
     beefApp.frame.find('.sentence').removeClass('highlight');
     for (i = 0; i < 3; i++) {
       if (data[i]) {
-        beefApp.frame.find('.' + data[i].sentence_class).addClass('highlight highlight_' + i);
+        if (data[i].count === data[0].count) {
+          beefApp.frame.find('.' + data[i].sentence_class).addClass('highlight top');
+          
+        }
+        else {
+          beefApp.frame.find('.' + data[i].sentence_class).addClass('highlight rest');
+        }
       }
     }
   }
