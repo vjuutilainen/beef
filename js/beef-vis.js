@@ -207,6 +207,7 @@ $.extend(beefApp, {
       }
       else {
         d3.select(e)
+          .select('svg')
           .select('circle')
           .attr({
               r: radius,
