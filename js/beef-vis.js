@@ -143,7 +143,7 @@ $.extend(beefApp, {
 
     this.vertVisSvg = d3.select(beefVert[0])
                         .append('svg')
-                        .attr('height', this.vertVisHeight)
+                        .attr('height', this.vertVisHeight + 'px')
                         .attr('width', '40px')
                         .style({
                           position: 'absolute',
