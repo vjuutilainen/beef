@@ -169,7 +169,7 @@ $.extend(beefApp, {
     sentences.each(function(i, e) {
 
       var matches = _this.visData.filter(function(vd) {
-        return vd.sentence_id === parseInt($(e).data('sentence-id')); 
+        return parseInt(vd.sentence_id) === parseInt($(e).data('sentence-id')); 
       });
 
       var radius = matches.length > 0 ? parseInt(matches[0].count) / _this.maxBeefValue * _this.circleMaxVertRadius : 0;
