@@ -58,6 +58,9 @@
           });
           $(this).html(sentences);
         });
+        $.each(beefApp.frame.find('.sentence'), function (i, el) {
+          $(this).attr('data-offset-top', $(this).offset().top);
+        });
         beefApp.maxSentences = i;
 
         // Get beefs.
