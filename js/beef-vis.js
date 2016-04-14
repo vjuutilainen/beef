@@ -22,7 +22,7 @@ $.extend(beefApp, {
   visWidth: 150,
   visHeight: 40,
   vertVisWidth: 40,
-  vertVisHeight: 150,
+  vertVisHeight: 20000,
   visSvg: null,
   visLine: null,
   visCircles: null,
@@ -119,8 +119,6 @@ $.extend(beefApp, {
         return parseInt(d.count) / this.maxBeefValue * this.circleMaxRadius; 
       }.bind(this)
     });
-
-    this.vertVisHeight = 20000;
 
     this.vertVisLine.attr({
       x1: this.vertVisWidth / 2,
