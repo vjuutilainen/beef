@@ -119,7 +119,7 @@ $.extend(beefApp, {
 
     this.vertVisLine.attr({
       x1: this.vertVisWidth / 2,
-      y1: this.visPadding,
+      y1: 0,
       x2: this.vertVisWidth / 2,
       y2: '10000', // !!!
       'stroke': 'black',
@@ -155,14 +155,18 @@ $.extend(beefApp, {
 
     this.visSentenceCount = maxcount ? parseInt(maxcount) : 16;
 
-    this.vertVisSvg = d3.select(this.frame.find('body')[0])
+    var beefVert = $('<div></div>').css('position', 'relative');
+
+    var container = this.frame.find('article.content .text p').first().before(beefVert);
+
+    this.vertVisSvg = d3.select(beefVert[0])
                         .append('svg')
-                        .attr('height', '10000px') // !!!
+                        .attr('height', window.innerHeight) // !!!
                         .attr('width', '40px')
                         .style({
                           position: 'absolute',
                           top: '0px',
-                          right: '0px',
+                          right: '-28px',
                           'z-index': '500'
                         });
 
