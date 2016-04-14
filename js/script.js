@@ -61,6 +61,8 @@
         $.each(beefApp.frame.find('.sentence'), function (i, el) {
           $(this).attr('data-offset-top', $(this).offset().top);
         });
+
+        // Set max sentences.
         beefApp.maxSentences = i;
 
         // Get beefs.
@@ -69,15 +71,16 @@
         }
         beefApp.getBeefs(data);
 
-        window.setTimeout(function () {
-          window.setInterval(function () {
-            beefApp.getBeefs(data, true);
-          }, 10000);
-        }, 5000);
+        // window.setTimeout(function () {
+        //   window.setInterval(function () {
+        //     beefApp.getBeefs(data, true);
+        //   }, 10000);
+        // }, 5000);
 
         // Init frame events.
         beefApp.initIframeEvents(beefApp.frame);
 
+        // Add bottom info.
         beefApp.frame.find('.text').after('<div class="beefinfo"><div class="burger"><img src="' + beefApp.path + 'img/burger.png" alt="" /></div> Where was the beef? Pleace select a sentence that best sums up the story.</div>');
       };
     },
