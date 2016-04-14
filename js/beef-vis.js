@@ -37,7 +37,6 @@ $.extend(beefApp, {
           'cursor': 'pointer'
         });
       
-
     join.attr({
       fill: function(d, i) { return parseInt(d.count) === _this.maxBeefValue ? 'rgba(240,130,175,1)' : 'rgba(255,220,0,1)'; },
       cx: function(d, i) { return this.visPadding + (parseInt(d.sentence_id) * (this.visWidth - (this.visPadding * 2)) / this.visSentenceCount); }.bind(this),
@@ -55,13 +54,9 @@ $.extend(beefApp, {
       esivis.find('iframe')[0].contentWindow.setTimeout('this.scrollTo(0, ' + (y - 50) + ');', 1);
     });
 
-    if(data.length > 0) {
-     var sorted = this.visData.sort(function(a, b) { return parseInt(a.count) > parseInt(b.count) ? -1 : parseInt(a.count) < parseInt(b.count) ? 1 : 0; });
-     this.visInfo.html('<p><span class="infotitle">Missä on asian pihvi?</span><br> ' + sorted[0].sentence + ' <span class="infocount">(' + sorted[0].count + ')</span></p>');
-    }
-
     this.initVisEvents();
     this.resizeVis();
+    if(data.length > 0) this.updateVisInfo();
    
   },
 
@@ -87,12 +82,18 @@ $.extend(beefApp, {
     this.visCircles.on('mouseover', function(d) {
       d3.select(this).attr('fill', function(d, i) {
         return parseInt(d.count) === _this.maxBeefValue ? 'rgba(240,130,175,1)' : 'rgba(255,220,0,1)';
+      })
+      .attr('r', function(d, i) { 
+        return (parseInt(d.count) / _this.maxBeefValue * _this.circleMaxRadius) + 1; 
       });
     });
 
     this.visCircles.on('mouseout', function(d) {
       d3.select(this).attr('fill', function(d, i) {
         return parseInt(d.count) === _this.maxBeefValue ? 'rgba(240,130,175,1)' : 'rgba(255,220,0,1)';
+      })
+      .attr('r', function(d, i) { 
+        return parseInt(d.count) / _this.maxBeefValue * _this.circleMaxRadius; 
       });
     });
   },
@@ -109,7 +110,6 @@ $.extend(beefApp, {
       x2: this.visWidth,
       y2: this.visHeight / 2,
       'stroke': '#e1e1e1',
-      'stroke-dasharray': '1, 3',
       'stroke-width': '1px'
     });
 
@@ -129,7 +129,6 @@ $.extend(beefApp, {
       x2: this.vertVisWidth / 2,
       y2: '10000', // !!!
       'stroke': '#e1e1e1',
-      'stroke-dasharray': '1, 3',
       'stroke-width': '1px'
     });
 
@@ -228,24 +227,21 @@ $.extend(beefApp, {
           });
       }
 
-
-     
-
-     
-
-
     });
 
     this.resizeVis();
     
   },
 
-
+  updateVisInfo() {
+    var sorted = this.visData.sort(function(a, b) { return parseInt(a.count) > parseInt(b.count) ? -1 : parseInt(a.count) < parseInt(b.count) ? 1 : 0; });
+    this.visInfo.html('<p><span class="infotitle">Missä on asian pihvi?</span>' + sorted[0].sentence + ' <span class="infocount">(' + sorted[0].count + ')</span></p>');
+  },
 
   initVis: function (data, maxcount) {
 
     var _this = this;
-    
+
     this.visData = (location.href.match('http://beef.dev') || location.href.match('http://yle.fi')) ? data : this.createMockData();
     this.visSentenceCount = maxcount ? parseInt(maxcount) : 16;
 
@@ -266,12 +262,6 @@ $.extend(beefApp, {
                                  .style({
                                    'cursor': 'pointer'
                                  });
-                                
-
-    if(data.length > 0) {
-      var sorted = this.visData.sort(function(a, b) { return parseInt(a.count) > parseInt(b.count) ? -1 : parseInt(a.count) < parseInt(b.count) ? 1 : 0; });
-      this.visInfo.html('<p><span class="infotitle">Missä on asian pihvi?</span>' + sorted[0].sentence + ' <span class="infocount">(' + sorted[0].count + ')</span></p>');
-    }
 
     this.initVisEvents();
     
