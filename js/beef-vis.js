@@ -172,7 +172,7 @@ $.extend(beefApp, {
         return vd.sentence_id === parseInt($(e).data('sentence-id')); 
       });
 
-      var radius = matches.length > 0 ? matches[0].count / _this.maxBeefValue * _this.circleMaxVertRadius : 0;
+      var radius = matches.length > 0 ? parseInt(matches[0].count) / _this.maxBeefValue * _this.circleMaxVertRadius : 0;
 
       $(e)
         .css('right', '10px')
