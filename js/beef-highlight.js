@@ -6,11 +6,11 @@
     for (i = 0; i < 3; i++) {
       if (data[i]) {
         if (data[i].count === data[0].count) {
-          beefApp.frame.find('.' + data[i].sentence_class).addClass('highlight top');
+          beefApp.frame.find('.' + data[i].sentence_class).removeClass('rest').addClass('highlight top');
           
         }
         else {
-          beefApp.frame.find('.' + data[i].sentence_class).addClass('highlight rest');
+          beefApp.frame.find('.' + data[i].sentence_class).removeClass('top').addClass('highlight rest');
         }
       }
     }
