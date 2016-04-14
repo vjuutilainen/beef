@@ -13,17 +13,19 @@ p {
       transition: all 3s;
       text-decoration: none !important;
     }
+    &.disabled {
+      cursor: default;
+    }
     &.burgered {
       text-decoration: underline;
       text-decoration-color: #ff0;
       text-decoration-style: double;
     }
     &.highlight {
-      &.highlight_0 {
+      &.top {
         background-color: rgba(225, 0, 90, 0.15);
       }
-      &.highlight_1,
-      &.highlight_2 {
+      &.rest {
         background-color: rgba(255, 255, 0, 0.1);
       }
     }
@@ -80,7 +82,7 @@ p {
 .beef-vis {
   .info {
     font-family: georgia;
-    font-size: 12px;
+    font-size: 13px;
     font-style: italic;
     margin-bottom: 10px;
     text-align: center;
