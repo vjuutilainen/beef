@@ -120,13 +120,13 @@ $.extend(beefApp, {
       }.bind(this)
     });
 
-    this.vertVisHeight = window.innerHeight;
+    this.vertVisHeight = 20000;
 
     this.vertVisLine.attr({
       x1: this.vertVisWidth / 2,
       y1: 0,
       x2: this.vertVisWidth / 2,
-      y2: '10000', // !!!
+      y2: this.vertVisHeight,
       'stroke': '#e1e1e1',
       'stroke-width': '1px'
     });
@@ -209,7 +209,7 @@ $.extend(beefApp, {
 
   updateVisInfo() {
     var sorted = this.visData.sort(function(a, b) { return parseInt(a.count) > parseInt(b.count) ? -1 : parseInt(a.count) < parseInt(b.count) ? 1 : 0; });
-    this.visInfo.html('<p><span class="infotitle">Missä on asian pihvi?</span>' + sorted[0].sentence + ' <span class="infocount">(' + sorted[0].count + ')</span></p>');
+    this.visInfo.html('<p><span class="infotitle">Missä on asian pihvi?</span>"' + sorted[0].sentence + '" <span class="infocount">(' + sorted[0].count + ')</span></p>');
   },
 
   handleData(data, maxcount) {
