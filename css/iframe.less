@@ -12,6 +12,7 @@ p {
     }
     .msg {
       background-color: #fff;
+      display: none;
       float: right;
       font-family: georgia;
       font-size: 20px;
@@ -34,11 +35,15 @@ p {
       z-index: 2;
       img {
         display: inline-block;
-        height: 50px;
-        padding-left: 7px;
-        position: relative;
-        top: 7px;
-        width: 50px;
+        height: 40px;
+        left: 12px;
+        position: absolute;
+        top: 12px;
+        width: 40px;
+        &.check {
+          display: none;
+          top: 16px;
+        }
       }
     }
   } 

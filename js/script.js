@@ -93,7 +93,8 @@
         burger.fadeOut(500);
       }, 3000);
       burger.click(function () {
-        $(this).hide();
+        $(this).find('img').fadeOut(200);
+        $('<img src="' + beefApp.path + 'img/check.png" class="check" />').appendTo($(this)).fadeIn(500);
         var sentence = beefApp.frame.find('.' + $(this).data('sentence-class'));
         var msg = $('<div class="msg">Beef\'d</div>').appendTo(sentence);
         window.setTimeout(function () {
