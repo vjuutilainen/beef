@@ -137,6 +137,8 @@
             else {
               beefApp.initVis(data, beefApp.maxSentences);
               beefApp.initVerticalVis(data, beefApp.maxSentences);
+              beefApp.updateVis(data, beefApp.maxSentences);
+              beefApp.updateVerticalVis(data, beefApp.maxSentences);
             }
           }
         },
