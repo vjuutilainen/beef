@@ -54,7 +54,7 @@
         beefApp.frame.find('.text p').each(function () {
           var sentences = $(this).text().replace(/([^.!?]*[^.!?\s][.!?]['"]?)(\s|$)/g, function (val) {
             i++;
-            return '<span class="sentence sentence_' + i + '" data-sentence="' + val.trim() + '" data-sentence-class="sentence_' + i + '" data-sentence-id="' + i + '">' + val + '</span>'
+            return '<span class="sentence sentence_' + i + '" data-sentence="' + val.trim() + '" data-sentence-class="sentence_' + i + '" data-sentence-id="' + i + '"><a href="javascript:;">' + val + '</a></span>';
           });
           $(this).html(sentences);
         });
@@ -83,19 +83,21 @@
         if ($(this).hasClass('disabled')) {
           return false;
         }
-        $(this).addClass('disabled');
         beefApp.addBurger($(this));
       });
     },
     addBurger: function (element) {
       var burger = $('<div class="burger" data-sentence="' + element.data('sentence') + '" data-sentence-class="' + element.data('sentence-class') + '" data-sentence-id="' + element.data('sentence-id') + '"><img src="' + beefApp.path + 'img/burger.png" alt="" /></div>').appendTo(element);
+      element.addClass('burgered');
       window.setTimeout(function () {
         burger.fadeOut(500);
+        element.removeClass('burgered');
       }, 3000);
       burger.click(function () {
         $(this).find('img').fadeOut(200);
         $('<img src="' + beefApp.path + 'img/check.png" class="check" />').appendTo($(this)).fadeIn(500);
         var sentence = beefApp.frame.find('.' + $(this).data('sentence-class'));
+        sentence.addClass('disabled');
         var msg = $('<div class="msg">Beef\'d</div>').appendTo(sentence);
         window.setTimeout(function () {
           msg.fadeOut(500);
