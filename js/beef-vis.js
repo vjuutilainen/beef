@@ -208,10 +208,11 @@ $.extend(beefApp, {
                      .append('svg')
                      .attr('width', '20px')
                      .attr('height', '20px');
+
         svg.append('circle')
             .attr({
               r: radius,
-              fill: '#000',
+              fill: function() { return matches[0] && parseInt(matches[0].count) === _this.maxBeefValue ? 'rgba(225,0,90,0.3)' : 'rgba(255,255,0,0.7)'; },
               cx: (20 / 2),
               cy: (20 / 2)
             });
@@ -222,7 +223,7 @@ $.extend(beefApp, {
           .select('circle')
           .attr({
               r: radius,
-              fill: '#000',
+              fill: function() { return matches[0] && parseInt(matches[0].count) === _this.maxBeefValue ? 'rgba(225,0,90,0.3)' : 'rgba(255,255,0,0.7)'; },
               cx: (20 / 2),
               cy: (20 / 2)
           });
@@ -279,7 +280,7 @@ $.extend(beefApp, {
 
     if(data.length > 0) {
       var sorted = this.visData.sort(function(a, b) { return parseInt(a.count) > parseInt(b.count) ? -1 : parseInt(a.count) < parseInt(b.count) ? 1 : 0; });
-      this.visInfo.html('<p><span class="infotitle">Missä on asian pihvi?</span><br> ' + sorted[0].sentence + ' <span class="infocount">(' + sorted[0].count + ' beefiä)</span></p>');
+      this.visInfo.html('<p><span class="infotitle">Missä on asian pihvi?</span><br> ' + sorted[0].sentence + ' <span class="infocount">(' + sorted[0].count + ')</span></p>');
     }
 
     this.initVisEvents();
