@@ -28,7 +28,7 @@ $.extend(beefApp, {
   visCircles: null,
   visData: null,
   visSentenceCount: 0,
-  visPadding: 15,
+  visPadding: 20,
   maxBeefValue: 0,
   circleMaxRadius: 15,
   circleMaxVertRadius: 10,
@@ -158,10 +158,10 @@ $.extend(beefApp, {
 
   updateVerticalVis(data, maxcount) {
 
-    this.handleData(data, maxcount);
-
-    var sentences = this.frame.find('.side_viz');
     var _this = this;
+    this.handleData(data, maxcount);
+    var sentences = this.frame.find('.side_viz');
+    
     sentences.each(function(i, e) {
 
       var matches = _this.visData.filter(function(vd) {
