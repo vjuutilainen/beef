@@ -61,11 +61,14 @@ $.extend(beefApp, {
      this.visInfo.html('<p><span class="infotitle">Missä on asian pihvi?</span><br> ' + sorted[0].sentence + ' <span class="infocount">(' + sorted[0].count + ' beefiä)</span></p>');
     }
 
+    this.initVisEvents();
     this.resizeVis();
    
   },
 
   initVisEvents: function() {
+
+    var _this = this;
 
     window.addEventListener('resize', function() {
       this.resizeVis();
@@ -83,11 +86,15 @@ $.extend(beefApp, {
     });
 
     this.visCircles.on('mouseover', function(d) {
-      d3.select(this).attr('fill', 'magenta');
+      d3.select(this).attr('fill', function(d, i) {
+        return parseInt(d.count) === _this.maxBeefValue ? 'rgba(225,0,90,0.5)' : 'rgba(255,255,0,1)';
+      });
     });
 
     this.visCircles.on('mouseout', function(d) {
-      d3.select(this).attr('fill', 'yellow');
+      d3.select(this).attr('fill', function(d, i) {
+        return parseInt(d.count) === _this.maxBeefValue ? 'rgba(225,0,90,0.3)' : 'rgba(255,255,0,0.7)';
+      });
     });
   },
 
@@ -236,6 +243,8 @@ $.extend(beefApp, {
 
 
   initVis: function (data, maxcount) {
+
+    var _this = this;
     
     this.visData = (location.href.match('http://beef.dev') || location.href.match('http://yle.fi')) ? data : this.createMockData();
     this.visSentenceCount = maxcount ? parseInt(maxcount) : 16;
@@ -265,9 +274,7 @@ $.extend(beefApp, {
                                    'cursor': 'pointer'
                                  })
                                  .attr({
-                                    fill: 'yellow',
-                                    stroke: 'black',
-                                    'stroke-width': '4px'
+                                    fill: function(d, i) { return parseInt(d.count) === _this.maxBeefValue ? 'rgba(225,0,90,0.3)' : 'rgba(255,255,0,0.7)'; }
                                  });
 
     if(data.length > 0) {
