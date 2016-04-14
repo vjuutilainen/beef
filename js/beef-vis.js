@@ -166,7 +166,7 @@ $.extend(beefApp, {
                         .style({
                           position: 'absolute',
                           top: '0px',
-                          right: '-28px',
+                          right: '-20px',
                           'z-index': '500'
                         });
 
