@@ -54,7 +54,7 @@
         beefApp.frame.find('.text p').each(function () {
           var sentences = $(this).text().replace(/([^.!?]*[^.!?\s][.!?]['"]?)(\s|$)/g, function (val) {
             i++;
-            return '<div class="side_viz side_vis_sentence_' + i + '" data-sentence-id="' + i + '"></div><span class="sentence sentence_' + i + '" data-sentence="' + val.trim() + '" data-sentence-class="sentence_' + i + '" data-sentence-id="' + i + '"><a href="javascript:;">' + val + '</a></span>';
+            return '<div class="side_viz side_vis_sentence_' + i + '" data-sentence-id="' + i + '"></div><span class="sentence sentence_' + i + '" data-sentence="' + val.trim() + '" data-sentence-class="sentence_' + i + '" data-sentence-id="' + i + '">' + val + '</span>';
           });
           $(this).html(sentences);
         });
