@@ -18,6 +18,8 @@ $.extend(beefApp, {
   vertVisGroups: null,
 
   updateVis: function(data, maxcount) {
+
+    var _this = this;
     
     this.visData = (location.href.match('http://beef.dev') || location.href.match('http://yle.fi')) ? data : this.createMockData();
     this.visSentenceCount = maxcount ? parseInt(maxcount) : 16;
