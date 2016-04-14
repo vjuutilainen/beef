@@ -93,6 +93,7 @@
       });
     },
     addBurger: function (element) {
+      beefApp.frame.find('.burger').hide();
       var burger = $('<div class="burger" data-sentence="' + element.data('sentence') + '" data-sentence-class="' + element.data('sentence-class') + '" data-sentence-id="' + element.data('sentence-id') + '"><img src="' + beefApp.path + 'img/burger.png" alt="" /></div>').appendTo(element);
       element.addClass('burgered');
       window.setTimeout(function () {
