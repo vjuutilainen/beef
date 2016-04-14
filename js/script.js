@@ -81,7 +81,7 @@
         beefApp.initIframeEvents(beefApp.frame);
 
         // Add bottom info.
-        beefApp.frame.find('.text').after('<div class="beefinfo"><div class="burger"><img src="' + beefApp.path + 'img/burger.png" alt="" /></div> Where was the beef? Pleace select a sentence that best sums up the story.</div>');
+        beefApp.frame.find('.text').after('<div class="beefinfo"><div class="burger"><img src="' + beefApp.path + 'img/burger.png" alt="" /></div> <span class="title">Where was the beef?</span><br />Select a sentence that best sums up the story.</div>');
       };
     },
     initIframeEvents: function () {
