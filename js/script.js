@@ -93,20 +93,28 @@
       });
     },
     addBurger: function (element) {
+      beefApp.frame.find('.sentence .burger').remove();
+      beefApp.frame.find('.burgered').removeClass('burgered');
       var burger = $('<div class="burger" data-sentence="' + element.data('sentence') + '" data-sentence-class="' + element.data('sentence-class') + '" data-sentence-id="' + element.data('sentence-id') + '"><img src="' + beefApp.path + 'img/burger.png" alt="" /></div>').appendTo(element);
       element.addClass('burgered');
       window.setTimeout(function () {
-        burger.fadeOut(500);
+        burger.fadeOut(500, function () {
+          $(this).remove();
+        });
         element.removeClass('burgered');
       }, 3000);
       burger.click(function () {
-        $(this).find('img').fadeOut(200);
+        $(this).find('img').fadeOut(200, function () {
+          $(this).remove();
+        });
         $('<img src="' + beefApp.path + 'img/check.png" class="check" />').appendTo($(this)).fadeIn(500);
         var sentence = beefApp.frame.find('.' + $(this).data('sentence-class'));
         sentence.addClass('disabled');
         var msg = $('<div class="msg">Beef\'d</div>').appendTo(sentence);
         window.setTimeout(function () {
-          msg.fadeOut(500);
+          msg.fadeOut(500, function () {
+            $(this).remove();
+          });
         }, 1500);
         var data = {
           'article_id':beefApp.article_id,
