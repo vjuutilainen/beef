@@ -33,12 +33,11 @@ $.extend(beefApp, {
         .append('circle')
         .style({
           'cursor': 'pointer'
-        })
-       .attr({
-          fill: function(d, i) { return parseInt(d.count) === _this.maxBeefValue ? 'rgba(225,0,90,0.3)' : 'rgba(255,255,0,0.7)'; }
-         });
+        });
+      
 
     join.attr({
+      fill: function(d, i) { return parseInt(d.count) === _this.maxBeefValue ? 'rgba(225,0,90,0.3)' : 'rgba(255,255,0,0.7)'; },
       cx: function(d, i) { return this.visPadding + (parseInt(d.sentence_id) * (this.visWidth - (this.visPadding * 2)) / this.visSentenceCount); }.bind(this),
       cy: this.visHeight / 2,
       r: function(d, i) { 
