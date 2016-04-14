@@ -1,7 +1,10 @@
 $.extend(beefApp, {
 
+  burgerPath: '<path d="M20.4,180v11.8c0,38.2,31.1,38.2,31.1,38.2h182.1c0,0,31.1-0.3,31.1-38.2V180H20.4z"/><path d="M112.2,0C20.4,0,20.4,70.3,20.4,70.3V100h244.3V70.3c0,0,0-70.3-91.8-70.3H112.2z"/><line style="fill:none;stroke:#000000;stroke-width:40;stroke-linecap:round;" x1="20" y1="140" x2="265" y2="140"/>',
   visWidth: 150,
   visHeight: 40,
+  vertVisWidth: 40,
+  vertVisHeight: 150,
   visSvg: null,
   visLine: null,
   visCircles: null,
@@ -10,6 +13,9 @@ $.extend(beefApp, {
   visPadding: 15,
   maxBeefValue: 0,
   circleMaxRadius: 15,
+  circleMaxVertRadius: 10,
+
+  vertVisGroups: null,
 
   updateVis: function(data, maxcount) {
     this.visData = data;
@@ -44,12 +50,12 @@ $.extend(beefApp, {
     this.visCircles.on('click', function(d) {
       var esivis = $('#esi-vis');
       var y = (esivis.find('iframe').contents().find('.sentence_' + d.sentence_id).offset().top);
-      esivis.find('iframe')[0].contentWindow.setTimeout('this.scrollTo(0, ' + y + ');', 1);
+      esivis.find('iframe')[0].contentWindow.setTimeout('this.scrollTo(0, ' + (y - 50) + ');', 1);
     });
 
     if(data.length > 0) {
-      var sorted = this.visData.sort(function(a, b) { return parseInt(a.count) > parseInt(b.count) ? -1 : parseInt(a.count) < parseInt(b.count) ? 1 : 0; });
-      this.visInfo.html('<p style="font-size:12px;font-family:Helvetica"><span style="font-weight:bold">Missä on asian pihvi?</span><br> ' + sorted[0].sentence + ' <span style="font-style:italic">(' + sorted[0].count + ' beefiä)</span></p>');
+     var sorted = this.visData.sort(function(a, b) { return parseInt(a.count) > parseInt(b.count) ? -1 : parseInt(a.count) < parseInt(b.count) ? 1 : 0; });
+     this.visInfo.html('<p><span class="infotitle">Missä on asian pihvi?</span><br> ' + sorted[0].sentence + ' <span class="infocount">(' + sorted[0].count + ' beefiä)</span></p>');
     }
    
   },
@@ -68,7 +74,7 @@ $.extend(beefApp, {
       element.addClass('clicked');
       window.setTimeout(function () {
         element.removeClass('clicked');
-      }, 1500);
+      }, 2000);
     });
 
     this.visCircles.on('mouseover', function(d) {
@@ -103,6 +109,19 @@ $.extend(beefApp, {
         return parseInt(d.count) / this.maxBeefValue * this.circleMaxRadius; 
       }.bind(this)
     });
+
+    this.vertVisHeight = window.innerHeight;
+
+    this.vertVisLine.attr({
+      x1: this.vertVisWidth / 2,
+      y1: this.visPadding,
+      x2: this.vertVisWidth / 2,
+      y2: '10000', // !!!
+      'stroke': 'black',
+      'stroke-dasharray': '1, 3',
+      'stroke-width': '1px'
+    });
+
   },
 
   createMockData: function() {
@@ -125,6 +144,136 @@ $.extend(beefApp, {
       ];
   },
 
+  initVerticalVis: function() {
+    
+    this.vertVisSvg = d3.select(this.frame.find('body')[0])
+                        .append('svg')
+                        .attr('height', '10000px') // !!!
+                        .attr('width', '40px')
+                        .style({
+                          position: 'absolute',
+                          top: '0px',
+                          right: '0px',
+                          'z-index': '500'
+                        });
+
+    this.vertVisLine = this.vertVisSvg.append('line');
+
+    this.updateVerticalVis();
+  },
+
+  updateVerticalVis() {
+
+    var sentences = this.frame.find('.side_viz');
+    var _this = this;
+    sentences.each(function(i, e) {
+
+      var matches = _this.visData.filter(function(vd) {
+        return vd.sentence_id === parseInt($(e).data('sentence-id')); 
+      });
+
+      var radius = matches.length > 0 ? matches[0].count / _this.maxBeefValue * _this.circleMaxVertRadius : 0;
+
+      $(e)
+        .css('right', '10px')
+        .css('width', '20px')
+        .css('height', '20px');
+      
+      var svg = d3.select(e)
+                   .append('svg')
+                   .attr('width', '20px')
+                   .attr('height', '20px');
+
+      svg.append('circle')
+          .attr({
+            r: radius,
+            fill: '#000',
+            cx: (20 / 2),
+            cy: (20 / 2)
+          });
+
+
+    });
+
+    // side_vis_sentence_12
+
+    // var frameBody = this.frame.find('body')[0];
+
+    
+
+    // var join = d3.select(frameBody)
+    //                           .selectAll('.toggle')
+    //                           .data(sentences);
+
+
+
+    // join.enter()
+    //     .append('div')
+    //     .style({
+    //       ''
+    //     })
+    //     .html('foo');
+
+    //vertVisSvg.selectAll('g').data(sentences);
+
+    //this.vertVisGroups = join.enter().append('di');
+    // this.vertVisGroups
+    //     .append('g')
+    //     .attr({
+    //       'class': function(d, i) {
+    //         return d.className;
+    //       },
+    //       'transform': function(d, i) {
+    //         var x = 20;
+    //         var y = d.offsetTop;
+
+    //         console.log(y);
+
+    //         return 'translate(' + x + ',' + y + ') scale(0.05)'; 
+    //       } 
+    //     })
+    //     .html(this.burgerPath);
+
+    // this.vertVisGroups
+    //     .append('circle')
+    //     .attr({
+    //       cx: this.vertVisWidth / 2,
+    //       cy: function(d, i) { 
+
+    //         console.log(d.offsetTop);
+
+
+    //         var y = $(d).data('offset-top');
+    //         console.log(y);
+
+    //         return y + 'px';
+    //       },
+    //       r: function(d, i) { 
+    //         var matches = this.visData.filter(function(vd) { 
+    //           return 'sentence_' + vd.sentence_id === d.className.split(' ')[1]; 
+    //         });
+
+    //         if(matches.length > 0) {
+    //           return parseInt(matches[0].count) / this.maxBeefValue * this.circleMaxRadius;
+    //         }
+    //         else {
+    //           return 1;
+    //         }
+
+
+             
+    //       }.bind(this)
+    //     });
+        
+    //     this.vertVisGroups.attr('class', function(d, i) { return 'ref' + d.className; }); 
+
+
+        
+        
+    
+    
+  },
+
   initVis: function (data, maxcount) {
     
     this.visData = (location.href.match('http://beef.dev') || location.href.match('http://yle.fi')) ? data : this.createMockData();
@@ -139,6 +288,11 @@ $.extend(beefApp, {
     this.maxBeefValue = d3.max(this.visData, function(d) { return parseInt(d.count); });
 
     this.visLine = this.visSvg.append('line');
+
+    // this.visSvg
+    //     .append('g')
+    //     .attr('transform', 'scale(0.1)')
+    //     .html(this.burgerPath);
 
     this.visCircles = this.visSvg.selectAll('circle')
                                  .data(this.visData)
@@ -158,7 +312,10 @@ $.extend(beefApp, {
       this.visInfo.html('<p><span class="infotitle">Missä on asian pihvi?</span><br> ' + sorted[0].sentence + ' <span class="infocount">(' + sorted[0].count + ' beefiä)</span></p>');
     }
 
-    this.resizeVis();
+    
     this.initVisEvents();
+    this.initVerticalVis();
+    this.resizeVis();
+    
   }
 });
