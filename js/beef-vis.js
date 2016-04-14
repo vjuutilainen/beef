@@ -53,8 +53,8 @@ $.extend(beefApp, {
         return parseInt(d.count) / this.maxBeefValue * this.circleMaxRadius; 
       }.bind(this)
     });
-    this.initVisEvents();
     this.visCircles = join;
+    this.initVisEvents();
     this.resizeVis();
     if(data.length > 0) this.updateVisInfo();
   },
