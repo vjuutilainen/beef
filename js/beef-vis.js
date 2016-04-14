@@ -18,7 +18,10 @@ $.extend(beefApp, {
   vertVisGroups: null,
 
   updateVis: function(data, maxcount) {
-    this.visData = data;
+    
+    this.visData = (location.href.match('http://beef.dev') || location.href.match('http://yle.fi')) ? data : this.createMockData();
+    this.visSentenceCount = maxcount ? parseInt(maxcount) : 16;
+
     this.visSentenceCount = parseInt(maxcount);
     this.maxBeefValue = d3.max(this.visData, function(d) { return parseInt(d.count); });
 
@@ -57,6 +60,8 @@ $.extend(beefApp, {
      var sorted = this.visData.sort(function(a, b) { return parseInt(a.count) > parseInt(b.count) ? -1 : parseInt(a.count) < parseInt(b.count) ? 1 : 0; });
      this.visInfo.html('<p><span class="infotitle">Missä on asian pihvi?</span><br> ' + sorted[0].sentence + ' <span class="infocount">(' + sorted[0].count + ' beefiä)</span></p>');
     }
+
+    this.resizeVis();
    
   },
 
@@ -144,8 +149,12 @@ $.extend(beefApp, {
       ];
   },
 
-  initVerticalVis: function() {
-    
+  initVerticalVis: function(data, maxcount) {
+
+    this.visData = (location.href.match('http://beef.dev') || location.href.match('http://yle.fi')) ? data : this.createMockData();
+
+    this.visSentenceCount = maxcount ? parseInt(maxcount) : 16;
+
     this.vertVisSvg = d3.select(this.frame.find('body')[0])
                         .append('svg')
                         .attr('height', '10000px') // !!!
@@ -159,10 +168,12 @@ $.extend(beefApp, {
 
     this.vertVisLine = this.vertVisSvg.append('line');
 
-    this.updateVerticalVis();
   },
 
-  updateVerticalVis() {
+  updateVerticalVis(data, maxcount) {
+
+    this.visData = (location.href.match('http://beef.dev') || location.href.match('http://yle.fi')) ? data : this.createMockData();
+    this.visSentenceCount = maxcount ? parseInt(maxcount) : 16;
 
     var sentences = this.frame.find('.side_viz');
     var _this = this;
@@ -179,105 +190,52 @@ $.extend(beefApp, {
         .css('width', '20px')
         .css('height', '20px');
       
-      var svg = d3.select(e)
-                   .append('svg')
-                   .attr('width', '20px')
-                   .attr('height', '20px');
+      
 
-      svg.append('circle')
+      if(d3.select(e).select('svg')[0][0] === null) {
+        var svg = d3.select(e)
+                     .append('svg')
+                     .attr('width', '20px')
+                     .attr('height', '20px');
+        svg.append('circle')
+            .attr({
+              r: radius,
+              fill: '#000',
+              cx: (20 / 2),
+              cy: (20 / 2)
+            });
+      }
+      else {
+        d3.select(e)
+          .select('circle')
           .attr({
-            r: radius,
-            fill: '#000',
-            cx: (20 / 2),
-            cy: (20 / 2)
+              r: radius,
+              fill: '#000',
+              cx: (20 / 2),
+              cy: (20 / 2)
           });
+      }
+
+
+     
+
+     
 
 
     });
 
-    // side_vis_sentence_12
-
-    // var frameBody = this.frame.find('body')[0];
-
-    
-
-    // var join = d3.select(frameBody)
-    //                           .selectAll('.toggle')
-    //                           .data(sentences);
-
-
-
-    // join.enter()
-    //     .append('div')
-    //     .style({
-    //       ''
-    //     })
-    //     .html('foo');
-
-    //vertVisSvg.selectAll('g').data(sentences);
-
-    //this.vertVisGroups = join.enter().append('di');
-    // this.vertVisGroups
-    //     .append('g')
-    //     .attr({
-    //       'class': function(d, i) {
-    //         return d.className;
-    //       },
-    //       'transform': function(d, i) {
-    //         var x = 20;
-    //         var y = d.offsetTop;
-
-    //         console.log(y);
-
-    //         return 'translate(' + x + ',' + y + ') scale(0.05)'; 
-    //       } 
-    //     })
-    //     .html(this.burgerPath);
-
-    // this.vertVisGroups
-    //     .append('circle')
-    //     .attr({
-    //       cx: this.vertVisWidth / 2,
-    //       cy: function(d, i) { 
-
-    //         console.log(d.offsetTop);
-
-
-    //         var y = $(d).data('offset-top');
-    //         console.log(y);
-
-    //         return y + 'px';
-    //       },
-    //       r: function(d, i) { 
-    //         var matches = this.visData.filter(function(vd) { 
-    //           return 'sentence_' + vd.sentence_id === d.className.split(' ')[1]; 
-    //         });
-
-    //         if(matches.length > 0) {
-    //           return parseInt(matches[0].count) / this.maxBeefValue * this.circleMaxRadius;
-    //         }
-    //         else {
-    //           return 1;
-    //         }
-
-
-             
-    //       }.bind(this)
-    //     });
-        
-    //     this.vertVisGroups.attr('class', function(d, i) { return 'ref' + d.className; }); 
-
-
-        
-        
-    
+    this.resizeVis();
     
   },
+
+
 
   initVis: function (data, maxcount) {
     
     this.visData = (location.href.match('http://beef.dev') || location.href.match('http://yle.fi')) ? data : this.createMockData();
     this.visSentenceCount = maxcount ? parseInt(maxcount) : 16;
+
+
 
     var beefVis = $('<div class="beef-vis"></div>');
     this.frame.find('article.content .hgroup h2').after(beefVis);
@@ -312,10 +270,7 @@ $.extend(beefApp, {
       this.visInfo.html('<p><span class="infotitle">Missä on asian pihvi?</span><br> ' + sorted[0].sentence + ' <span class="infocount">(' + sorted[0].count + ' beefiä)</span></p>');
     }
 
-    
     this.initVisEvents();
-    this.initVerticalVis();
-    this.resizeVis();
     
   }
 });
