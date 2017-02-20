@@ -42,16 +42,18 @@
     initIframe: function () {
       esivis.find('#iframe')[0].onload = function () {
         // Store frame contents.
+
         beefApp.frame = esivis.find('iframe').contents();
         // Store article id.
-        beefApp.article_id = beefApp.frame.find('body').data('articleid');
+        var href = document.getElementById("iframe").contentWindow.location.href;
+        beefApp.article_id = href.substr(href.lastIndexOf('/') + 1);
         // Add custom inline css.
         // beefApp.frame.find('head').append('<style type="text/css"></style>');
         // Add custom css file.
         beefApp.frame.find('head').append('<link type="text/css" rel="stylesheet" href="' + beefApp.path + 'css/iframe.css">');
         // Mark sentences.
         var i = 0;
-        beefApp.frame.find('.text p').each(function () {
+        beefApp.frame.find('.yle__article__content .yle__article__paragraph').each(function () {
           var sentences = $(this).text().replace(/([^.!?]*[^.!?\s][.!?]['"]?)(\s|$)/g, function (val) {
             i++;
             return '<div class="side_viz side_vis_sentence_' + i + '" data-sentence-id="' + i + '"></div><span class="sentence sentence_' + i + '" data-sentence="' + val.trim() + '" data-sentence-class="sentence_' + i + '" data-sentence-id="' + i + '">' + val + '</span>';
@@ -81,7 +83,7 @@
         beefApp.initIframeEvents(beefApp.frame);
 
         // Add bottom info.
-        beefApp.frame.find('.text').after('<div class="beefinfo"><div class="burger"><img src="' + beefApp.path + 'img/burger.png" alt="" /></div> <span class="title">Where was the beef?</span><br />Select a sentence that best sums up the story.</div>');
+        beefApp.frame.find('.yle__article__content').after('<div class="beefinfo"><div class="burger"><img src="' + beefApp.path + 'img/burger.png" alt="" /></div> <span class="title">Where was the beef?</span><br />Select a sentence that best sums up the story.</div>');
       };
     },
     initIframeEvents: function () {
@@ -140,13 +142,13 @@
             beefApp.highLightBeefs(data);
             if (update === true) {
               beefApp.updateVis(data, beefApp.maxSentences);
-              beefApp.updateVerticalVis(data, beefApp.maxSentences);
+              // beefApp.updateVerticalVis(data, beefApp.maxSentences);
             }
             else {
               beefApp.initVis(data, beefApp.maxSentences);
-              beefApp.initVerticalVis(data, beefApp.maxSentences);
+              // beefApp.initVerticalVis(data, beefApp.maxSentences);
               beefApp.updateVis(data, beefApp.maxSentences);
-              beefApp.updateVerticalVis(data, beefApp.maxSentences);
+              // beefApp.updateVerticalVis(data, beefApp.maxSentences);
             }
           }
         },

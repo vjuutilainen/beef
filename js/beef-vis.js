@@ -28,7 +28,7 @@ $.extend(beefApp, {
   visCircles: null,
   visData: null,
   visSentenceCount: 0,
-  visPadding: 20,
+  visPadding: 40,
   maxBeefValue: 0,
   circleMaxRadius: 15,
   circleMaxVertRadius: 10,
@@ -120,14 +120,14 @@ $.extend(beefApp, {
       }.bind(this)
     });
 
-    this.vertVisLine.attr({
-      x1: this.vertVisWidth / 2,
-      y1: 0,
-      x2: this.vertVisWidth / 2,
-      y2: this.vertVisHeight,
-      'stroke': '#e1e1e1',
-      'stroke-width': '1px'
-    });
+    // this.vertVisLine.attr({
+    //   x1: this.vertVisWidth / 2,
+    //   y1: 0,
+    //   x2: this.vertVisWidth / 2,
+    //   y2: this.vertVisHeight,
+    //   'stroke': '#e1e1e1',
+    //   'stroke-width': '1px'
+    // });
 
   },
 
@@ -137,7 +137,7 @@ $.extend(beefApp, {
 
     var beefVert = $('<div></div>').css('position', 'relative');
 
-    var container = this.frame.find('article.content .text p').first().before(beefVert);
+    var container = this.frame.find('.yle__article__content p').first().before(beefVert);
 
     this.vertVisSvg = d3.select(beefVert[0])
                         .append('svg')
@@ -146,7 +146,7 @@ $.extend(beefApp, {
                         .style({
                           position: 'absolute',
                           top: '0px',
-                          right: '-20px',
+                          right: '-60px',
                           'z-index': '500'
                         });
 
@@ -169,7 +169,7 @@ $.extend(beefApp, {
       var radius = matches.length > 0 ? parseInt(matches[0].count) / _this.maxBeefValue * _this.circleMaxVertRadius : 0;
 
       $(e)
-        .css('right', '-10px')
+        .css('right', '45px')
         .css('width', '20px')
         .css('height', '20px');
       
@@ -223,14 +223,14 @@ $.extend(beefApp, {
 
     var left = $('<img src="' + beefApp.path + 'img/start.png">').css({
       position: 'absolute',
-      left: '0px',
+      left: '20px',
       top: '15px',
       width: '15px'
     });
 
     var right = $('<img src="' + beefApp.path + 'img/end.png">').css({
       position: 'absolute',
-      right: '0px',
+      right: '20px',
       top: '15px',
       width: '15px'
     });
@@ -238,7 +238,7 @@ $.extend(beefApp, {
     beefVis.append(left);
     beefVis.append(right);
 
-    this.frame.find('article.content .hgroup h2').after(beefVis);
+    this.frame.find('.yle__articlePage__article__meta').after(beefVis);
     this.visSvg = d3.select(beefVis[0]).append('svg');
     this.visInfo = d3.select(beefVis[0]).append('div').attr('class', 'info');
     this.visLine = this.visSvg.append('line');
