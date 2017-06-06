@@ -13,8 +13,9 @@
       return parseFloat(x.toFixed(d));
     },
     setPath: function () {
-      if (location.href.match('http://yle.fi/')) {
-        beefApp.path = 'http://yle.fi/plus/beef/';
+      if (location.href.match('//yle.fi/')) {
+        beefApp.path = '//yle.fi/plus/beef/';
+        // TODO. Broken.
         beefApp.php_path = 'http://alpha.yle.fi/plus/alpha/beef/';
       }
       else {

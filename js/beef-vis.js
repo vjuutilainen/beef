@@ -211,7 +211,7 @@ $.extend(beefApp, {
   },
 
   handleData(data, maxcount) {
-    this.visData = (location.href.match('http://beef.dev') || location.href.match('http://yle.fi')) ? data : mockdata;
+    this.visData = (location.href.match('http://beef.dev') || location.href.match('//yle.fi/')) ? data : mockdata;
     this.visSentenceCount = maxcount ? parseInt(maxcount) : 16;
     this.maxBeefValue = d3.max(this.visData, function(d) { return parseInt(d.count); });
   },
